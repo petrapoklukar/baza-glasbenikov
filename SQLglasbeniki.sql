@@ -32,16 +32,16 @@ CREATE TABLE glasbenik_deluje_v_okolici (
 	PRIMARY KEY (glasbenik, obcina)
 );
 
-CREATE TABLE model (
-	ime TEXT PRIMARY KEY,
-	za_izposojo BOOLEAN DEFAULT FALSE
-);
-
-CREATE TABLE je_lastnik (
-	glasbenik TEXT FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	glasbilo TEXT FOREIGN KEY REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
-	model_glasbila TEXT FOREIGN KEY REFERENCES model(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	PRIMARY KEY(glasbenik, glasbilo, model_glasbila)
+-- Popravek na šibko entiteto
+CREATE TABLE model ( 
+	ime TEXT NOT NULL, -- del primarnega ključa 
+	lastnik TEXT FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime)
+		ON DELETE CASCADE -- če se uporabnik izbriše, tudi glasbilo ni več na voljo
+		ON UPDATE CASCADE,
+	vrsta_glasbila TEXT REFERENCES tip_glasbila_ali_vokal(ime)
+		ON UPDATE CASCADE,	
+	za_izposojo BOOLEAN
+	PRIMARY KEY(ime, lastnik)
 );
 
 CREATE TABLE igra_poje (
