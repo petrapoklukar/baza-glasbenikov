@@ -1,4 +1,4 @@
--- Ali je treba pri REFERENCES zanr/obcina/.. dodati tudi CHECK ki bo preveril a je vnos pravilen?
+﻿-- Ali je treba pri REFERENCES zanr/obcina/.. dodati tudi CHECK ki bo preveril a je vnos pravilen?
 
 CREATE TABLE glasbenik (
 	uporabnisko_ime TEXT PRIMARY KEY,
@@ -12,28 +12,28 @@ CREATE TABLE glasbenik (
 -- Glasbenik mora imeti možnost izbiranja med večimi žanri, zato ne more imeti atributa isce_skupino_ki_igra_zanr ker bi potem lahko izbral samo enega. 
 -- Če se izbriše glasbenika, potem on ne išče več skupine
 CREATE TABLE glasbenik_isce_skupino (
-	glasbenik TEXT NOT NULL FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	zanr TEXT NOT NULL FOREIGN KEY REFERENCES zanr(ime) ON UPDATE CASCADE,
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
 	PRIMARY KEY (glasbenik, zanr)
 );
 
 -- Glasbenik je lahko član večih skupin, zato tudi ne more imeti atributa je_clan. Če se izbriše glasbenika, ni več član skupine, Če se izbriše skupino, potem
 -- ne more biti nihče njen član.
 CREATE TABLE je_clan (
-	glasbenik TEXT NOT NULL FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	skupina TEXT NOT NULL FOREIGN KEY REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE ,
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE ,
 	PRIMARY KEY (glasbenik, skupina)
 );
 
 -- Glasbenik lahko izbere več občin v katerih lahko deluje. 
 CREATE TABLE glasbenik_deluje_v_okolici (
-	glasbenik TEXT NOT NULL FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	obcina TEXT NOT NULL FOREIGN KEY REFERENCES obcina(ime) ON UPDATE CASCADE,
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	obcina TEXT NOT NULL REFERENCES obcina(ime) ON UPDATE CASCADE,
 	PRIMARY KEY (glasbenik, obcina)
 );
 
--- Popravek na šibko entiteto
-CREATE TABLE model ( 
+
+CREATE TABLE model ( --popravek šibka entiteta
 	ime TEXT NOT NULL, -- del primarnega ključa 
 	lastnik TEXT FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime)
 		ON DELETE CASCADE -- če se uporabnik izbriše, tudi glasbilo ni več na voljo
@@ -42,12 +42,12 @@ CREATE TABLE model (
 		ON UPDATE CASCADE,	
 	za_izposojo BOOLEAN
 	PRIMARY KEY(ime, lastnik)
-);
+
 
 CREATE TABLE igra_poje (
-	glasbenik TEXT FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	glasbilo TEXT FOREIGN KEY REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
-	stopnja_znanja TEXT NOT NULL FOREIGN KEY REFERENCES stopnja_znanja(stopnja), -- na voljo bodo samo tri moznosti: beginner, intermediate, advanced
+	glasbenik TEXT REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	glasbilo TEXT REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
+	stopnja_znanja TEXT NOT NULL REFERENCES stopnja_znanja(stopnja), -- na voljo bodo samo tri moznosti: beginner, intermediate, advanced
 	leto_zacetka INTEGER,
 	PRIMARY KEY (glasbenik, glasbilo)
 );
@@ -65,15 +65,15 @@ CREATE TABLE skupina(
 
 -- Skupina lahko igra več žanrov, zato žanr ne more biti njen atribut. Če se kupino izbiše, potem ona ne igra več nobenga žanra.
 CREATE TABLE skupina_igra_zanr (
-	skupina TEXT NOT NULL FOREIGN KEY REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	igra_zanr TEXT NOT NULL FOREIGN KEY REFERENCES zanr(ime) ON UPDATE CASCADE,
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	igra_zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
 	PRIMARY KEY (skupina, igra_zanr)
 );
 
 -- Člani skupine. Če se izbriše skupino, nima več članov. Če se izbriše glasbenika, ni več član skupine.
 CREATE TABLE clani_skupine (
-	skupina TEXT NOT NULL FOREIGN KEY REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	clan TEXT NOT NULL FOREIGN KEY REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	clan TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
 	PRIMARY KEY (skupina, clan)
 );
 
@@ -86,11 +86,11 @@ CREATE TABLE skupina_deluje_v_okolici (
 
 -- Če se izbriše skupino, potem ona ne išče več glasbil.
 CREATE TABLE skupina_isce(
-	skupina TEXT NOT NULL FOREIGN KEY REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-	glasbilo TEXT NOT NULL FOREIGN KEY REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
-	spol TEXT FOREIGN KEY REFERENCES spol(spol) DEFAULT vseeno ON UPDATE CASCADE, -- na voljo bo samo M, Z, vseeno
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	glasbilo TEXT NOT NULL REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
+	spol TEXT REFERENCES spol(spol) ON UPDATE CASCADE DEFAULT 'vseeno', -- na voljo bo samo M, Z, vseeno
 	stevilo INTEGER DEFAULT 1, -- atribut pove, koliko glasbenikov igrajoč dolocen instrument, isce skupina. 
-	PRIMARY KEY (skupina, glasbilo)
+	PRIMARY KEY (skupina, glasbilo,spol)
 );
 
 -- Občine ne moremo izbrisati, dokler obstaja vadnica, ki se nahaja v njej
@@ -99,7 +99,7 @@ CREATE TABLE vadnica (
 	e_mail TEXT NOT NULL, 
 	telefonska_stevilka INTEGER, 
 	ime TEXT,
-	se_nahaja_v TEXT NOT NULL FOREIGN KEY REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
+	se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Občine ne moremo izbrisati, dokler obstaja koncertno prizorisce, ki se nahaja v njej
@@ -108,20 +108,20 @@ CREATE TABLE koncertno_prizorisce (
 	e_mail TEXT NOT NULL, 
 	telefonska_stevilka INTEGER, 
 	ime TEXT, 
-	se_nahaja_v TEXT NOT NULL FOREIGN KEY REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
+	se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- Koncertnega prizorišča ne moremo izbrisati, če obstaja event, ki se je odvijal tam.
 CREATE TABLE event (
 	datum DATE NOT NULL, 
 	ime TEXT NOT NULL, 
-	prizorisce INTEGER FOREIGN KEY REFERENCES koncertno_prizorisce(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+	prizorisce INTEGER REFERENCES koncertno_prizorisce(id) ON DELETE RESTRICT ON UPDATE CASCADE,
 	PRIMARY KEY (datum, ime)
 );
 
 -- Tukej nevem kaj bi blo najbl smiselno: če se skupino izbriše a se potem izbrišejo tudi vsi eventi na katerih je igrala?
 CREATE TABLE skupina_je_igrala (
-	skupina TEXT NOT NULL FOREIGN KEY REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
 	event_datum DATE NOT NULL,
 	event_ime TEXT NOT NULL,
 	FOREIGN KEY (event_datum, event_ime) REFERENCES event(datum, ime) ON DELETE CASCADE ON UPDATE CASCADE, 
@@ -148,7 +148,7 @@ CREATE TABLE tip_glasbila_ali_vokal (
 
 -- Uporabniki bodo lahko izbirali med obstojecimi zanri.
 CREATE TABLE zanr (
-	ime PRIMARY KEY
+	ime TEXT PRIMARY KEY
 );
 
 -- Seznam vseh slovenskih občin. 
