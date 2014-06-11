@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="bootstrap.css">
+		<link rel="stylesheet" href="bootstrap.min.css">
+		<link rel="stylesheet" href="bootstrap-theme.min.css">
+		<script src="bootstrap.min.js"></script>
+		<title>Glasbenik.pikasi</title>
+	</head>
+	<body>
+		<div class="container">
+			<div class="page-header">
+  				<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+			</div>
+			
+		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+			<div class="container">
+				
+				<div class="navbar-collapse collapse">
+				  <form class="navbar-form navbar-right" role="form">
+					<div class="form-group">
+					  <input type="text" placeholder="Uporabniško ime" class="form-control">
+					</div>
+					<div class="form-group">
+					  <input type="password" placeholder="Geslo" class="form-control">
+					</div>
+					<button type="submit" class="btn btn-success">Login</button>
+				  </form>
+				</div><!--/.navbar-collapse -->
+			</div>
+		</div>
+	
+			<div class="row">
+				<form class="form-inline" role="form" action="/uporabnik" method="post">
+  					<div class="form-group">
+    					<label class="sr-only" for="exampleInputEmail2">Uporabniško ime</label>
+    					<input type="text" class="form-control" id="exampleInputEmail2" placeholder="Uporabniško ime" name="ime">
+  					</div>
+  					<div class="form-group">
+    					<label class="sr-only" for="exampleInputPassword2">Geslo</label>
+    					<input type="password" class="form-control" id="exampleInputPassword2" placeholder="Geslo" name="geslo">
+  					</div>
+  					<div class="checkbox">
+    					<label>
+      						<input type="checkbox" name="zapomni">Zapomni si me
+    					</label>
+  					</div>
+  					<button type="submit" class="btn btn-default">Vpiši se</button>
+  					<button class="btn btn-default" formaction="/uporabnik">Prijavi se</button>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>
