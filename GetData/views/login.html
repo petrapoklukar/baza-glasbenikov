@@ -37,14 +37,13 @@
   		<div class="col-md-1"></div>
   	</div>
 
-
-  <div class="row">
+      <div class="row">
     <div class="col-md-1">
     </div>
 
     <div class="col-md-10">
       
-      <div class="btn-group btn-group-justified"> 
+     <div class="btn-group btn-group-justified"> 
         <div class="btn-group">
           <form role="form" action="/" method="get">
             <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
@@ -52,15 +51,9 @@
         </div>
 
         <div class="btn-group">
-          <form role="form" action="/login" method="post">
-              <button type="submit" class="btn btn-default" id="meni1" >Log in</button>
-            </form>
-        </div>
-      
-        <div class="btn-group">
           <form role="form" action="/noviuporabnik" method="post">
-              <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
-            </form>
+            <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
+          </form>
         </div>
       </div>
       
@@ -74,34 +67,58 @@
     
   </div> 
 
-  <div class="row">
-      <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <div>
-            <p>Tukaj se bodo v prihodnosti izpisali rezultati iskanja. Zaenkrat pa samo preverjam ali deluje :) </p>
-            <p>Iskal si skupine, za katere velja:
-              <ul>
-                %for stavek, element in seznam:
-                  <li>{{stavek}}{{element}}</li>
-                %end
-              </ul>
-            </p>  
-          </div>
-        </div>
-      <div class="col-md-1"></div>
-    </div>
-  
 
-    <div class="row">
-    <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <footer>
-          <hr>
-          <p>&copy; PetraP & RokI & MatjazZ 2014</p>
-          </footer>
-      </div>
-    <div class="col-md-1"></div>
-    </div> <!-- /container -->
+<div class="row">
+    
+    <div class="col-md-1">
+    </div>
+    
+    <div class="col-md-3">
+    </div>
+
+    <div class="col-md-4">
+      
+
+        <form class="form-signin" role="form" action="/uporabnik" method="post">
+          <h3 class="form-signin-heading">Log in</h3>
+          <input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime" required autofocus>
+          <input type="password" name="geslo" class="form-control" placeholder="Geslo" required>
+          <label class="checkbox">
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+          <button class="btn btn-primary btn-block" type="submit">Log in</button>
+        </form>
+
+      
+    </div>
+
+    <div class="col-md-3">
+    </div>
+    
+
+    <div class="col-md-1">
+    </div>
+    
+  </div> 
+
+
+
+  <div class="row">
+    
+    <div class="col-md-1">
+    </div>
+    
+    <div class="col-md-10">
+      <footer>
+        <hr>
+        <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+        </footer>
+    </div>
+    
+    <div class="col-md-1">
+    </div>
+
+  </div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript

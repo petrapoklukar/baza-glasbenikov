@@ -39,52 +39,33 @@
 	
 
 	<div class="row">
-		<div class="col-md-1"></div>
+		<div class="col-md-1">
+		</div>
+
 		<div class="col-md-10">
 			
-				<nav class="navbar navbar-default" role="navigation">
-					<div class="container-fluid">
-					<!-- Brand and toggle get grouped for better mobile display -->
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-								<span class="sr-only">Toggle navigation</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-							<a class="navbar-brand" >Prijava</a>
-						</div>
-
-					<!-- Collect the nav links, forms, and other content for toggling -->
-						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-					 	<ul class="nav navbar-nav">
-<!-- REŠI PROBLEM S POST METODO NUJNO, SAJ GRE ZA GESLO IN UPORABNIŠKO IME -->						
-						<form class="navbar-form navbar-left" role="form" action="/uporabnik" method="post">
-							<div class="form-group">
-								<input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime">
-							</div>
-							<div class="form-group">
-								<input type="password" name="geslo" class="form-control" placeholder="Geslo">
-							</div>
-							<button type="submit" class="btn btn-default">Login</button>
-						</form>
-						</div><!-- /.navbar-collapse -->
-					</div><!-- /.container-fluid -->
-				</nav>
-			<!-- <form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
-					<input type="uporime" class="form-control" placeholder="Uporabniško ime">
+			<div class="btn-group btn-group-justified"> 
+				<div class="btn-group">
+					<form role="form" action="/login" method="post">
+				    	<button type="submit" class="btn btn-default" id="meni1" >Log in</button>
+				    </form>
 				</div>
-				<div class="form-group">
-					<input type="geslo" class="form-control" placeholder="Geslo">
+			
+				<div class="btn-group">
+					<form role="form" action="/noviuporabnik" method="post">
+				    	<button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
+				    </form>
 				</div>
-				<button type="submit" class="btn btn-default">Login</button>
-			</form> -->
-		<hr id="prijava">
-		<br>
+			</div>
+			
+			<hr id="prijava">
+			<br> 
 
 		</div>
-		<div class="col-md-1"></div>	
+		
+		<div class="col-md-1">
+		</div>	
+
 	</div> 
 
 	
@@ -97,7 +78,7 @@
 						<div class="form-group">
 							<label for="instrument">Inštrument, ki ga igra glasbenik</label>
 							<select class="form-control" id='instrument' name='instrument'>
-								<option>Izberi inštrument</option>
+								<option selected disabled>Izberi inštrument</option>
 									%for ime in uporabnik:
 										<option>{{ime[0]}}</option>
 									%end
@@ -107,7 +88,7 @@
 					  	<div class="form-group">
 							<label for="obcinadelovanja">Občina delovanja glasbenika</label>
 							<select class="form-control" id='obcina' name='obcina'>
-								<option>Izberi občino</option>
+								<option selected disabled>Izberi občino</option>
 									%for ime in obcina:
 										<option>{{ime[0]}}</option>
 									%end
@@ -118,7 +99,7 @@
 							<label for="zanrglasbenika">Žanr glasbenika</label>
 							<!-- <input type="zanrglasbenika" class="form-control" id="zanrglasbenika" placeholder="Izberi žanr"> -->
 							<select class="form-control" name='zanr' id='zanr'>
-							  	<option>Izberi žanr</option>
+							  	<option selected disabled>Izberi žanr</option>
 									%for ime in zanr:
 										<option>{{ime[0]}}</option>
 									%end
@@ -160,7 +141,7 @@
 						<div class="form-group">
 							<label for="obcinadelovanjas">Občina delovanja skupine</label>
 							<select class="form-control" name='obcina2'>
-								  <option>Izberi občino</option>
+								  <option selected disabled>Izberi občino</option>
 									%for ime in obcina2:
 										<option>{{ime[0]}}</option>
 									%end
@@ -170,7 +151,7 @@
 						<div class="form-group">
 							<label for="zanrskupine">Žanr skupine</label>
 							<select class="form-control" name='zanr2'>
-								  <option>Izberi žanr</option>
+								  <option selected disabled>Izberi žanr</option>
 									%for ime in zanr2:
 										<option>{{ime[0]}}</option>
 									%end

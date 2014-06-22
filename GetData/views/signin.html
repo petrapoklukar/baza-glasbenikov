@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>Glasbenik.pikasi</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+  	<div class="row">
+  		<div class="col-md-1"></div>
+  			<div class="col-md-10">
+  				<div class="page-header">
+  					<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+  				</div>
+  			</div>
+  		<div class="col-md-1"></div>
+  	</div>
+
+      <div class="row">
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+      
+     <div class="btn-group btn-group-justified"> 
+        <div class="btn-group">
+          <form role="form" action="/" method="get">
+            <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+          </form>
+        </div>
+
+        <div class="btn-group">
+          <form role="form" action="/login" method="post">
+            <button type="submit" class="btn btn-default" id="meni1" >Log in</button>
+          </form>
+        </div>
+      </div>
+      
+      <hr id="prijava">
+      <br> 
+
+    </div>
+    
+    <div class="col-md-1">
+    </div>  
+    
+  </div> 
+
+
+<div class="row">
+    
+    <div class="col-md-1">
+    </div>
+    
+    
+    <div class="col-md-10">
+      
+      <form class="form-horizontal" role="form" action="/signin" method="post">
+          
+        <div class="form-group">
+          <label for="ime1" class="col-sm-2 control-label">Ime</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="ime1" placeholder="Vnesi ime">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="priimek1" placeholder="Vnesi priimek">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="mail1" placeholder="Vnesi elektronski naslov">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="letorojstva" placeholder="Vnesi letnico">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="username1" placeholder="Vnesi uporabniško ime">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="geslo1" placeholder="Vnesi geslo">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="geslo2" class="col-sm-2 control-label">Ponovi geslo</label>
+          <div class="col-sm-10">
+            <input type="password" class="form-control" id="geslo1+2" placeholder="Ponovi geslo">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+            <div class="col-sm-10">
+              <select class="form-control" name='spol'>
+                  %for ime in spol:
+                    <option>{{ime[0]}}</option>
+                  %end
+              </select>
+            </div>
+        </div> 
+
+        <div class="form-group">
+          <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
+            <div class="col-sm-10">
+              <select class="form-control" name='stopnja'>
+                  %for ime in stopnja:
+                    <option>{{ime[0]}}</option>
+                  %end
+              </select>
+            </div>
+        </div>
+  
+        <div class="form-group">
+          <label for="instrument" class="col-sm-2 control-label">Inštrument, ki ga igraš</label>
+            <div class="col-sm-10">
+              <select class="form-control" id='instrument' name='instrument'>
+                <option id="disa" value="" selected disabled>Izberi inštrument</option>
+                  %for ime in uporabnik:
+                    <option>{{ime[0]}}</option>
+                  %end
+              </select>
+            </div>
+        </div>
+
+          <div class="form-group">
+            <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
+              <div class="col-sm-10">
+                <select class="form-control" id='obcina' name='obcina'>
+                  <option id="disa" selected disabled>Izberi občino</option>
+                    %for ime in obcina:
+                      <option>{{ime[0]}}</option>
+                    %end
+                </select>
+              </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
+              <div class="col-sm-10">
+                <select class="form-control" name='zanr' id='zanr'>
+                    <option id="bodisiv" selected disabled>Izberi žanr</option>
+                    %for ime in zanr:
+                      <option>{{ime[0]}}</option>
+                    %end
+                </select>
+              </div>
+          </div>
+        
+          <div class="form-group">
+            <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
+              <div class="col-sm-10">
+                <input type="radio" name="isceskupino" value="ne"> Ne
+                <input type="radio" name="isceskupino" value="da"> Da
+              </div>
+          </div>
+
+          
+          <br>
+            
+          <button type="submit" class="btn btn-primary">Sign in</button>
+          
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+    
+    
+  </div> 
+
+
+
+  <div class="row">
+    
+    <div class="col-md-1">
+    </div>
+    
+    <div class="col-md-10">
+      <footer>
+        <hr>
+        <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+        </footer>
+    </div>
+    
+    <div class="col-md-1">
+    </div>
+
+  </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

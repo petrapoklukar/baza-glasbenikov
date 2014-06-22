@@ -36,6 +36,7 @@ def fonts(filename):
 # Ostalo
 
 @route('/')
+@get('/')
 def main():
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     CurObcina.execute("SELECT ime FROM obcina ORDER BY ime")
@@ -72,6 +73,26 @@ def iskanje():
     return template('iskanjeskupine.html', seznam=seznam)
 
 
+@post('/login')
+@route('/login')
+@route('/login/')
+def login():
+    return template('login.html')
+
+
+@post('/noviuporabnik')
+@route('/noviuporabnik')
+@route('/noviuporabnik/')
+def noviuporabnik():
+    cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
+    CurObcina.execute("SELECT ime FROM obcina ORDER BY ime")
+    CurZanr.execute("SELECT ime FROM zanr ORDER BY ime")
+    CurStopnja.execute("SELECT stopnja FROM stopnja_znanja")
+    CurSpol.execute("SELECT spol FROM spol")
+    return template('signin.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
+                   stopnja=CurStopnja, spol=CurSpol)
+    
+
 
 @post('/uporabnik')
 @route('/uporabnik')
@@ -79,8 +100,22 @@ def iskanje():
 def uporabnik():
     uporime = request.forms.get('uporime')
     geslo = request.forms.get('geslo')
-    print(uporime, geslo)
     return template('uporabnik.html', uporime=uporime)
+
+@post('/signin')
+@route('/signin')
+@route('/signin/')
+def signin():
+    instrument = request.forms.get('instrument')
+    obcina = request.forms.get('obcina')
+    zanr = request.forms.get('zanr')
+    stopnja = request.forms.get('stopnja')
+    spol = request.forms.get('spol')
+    isceskupino = request.forms.get('isceskupino')
+    seznam = [('Igra inšturment: ',instrument), ('Deluje v okolici občine: ',obcina),
+              ('Igra žanr: ', zanr), ('Stopnja znanja: ', stopnja), ('Spol: ',spol),
+              ('Išče skupino: ', isceskupino)]
+    return 'zdaj si prijavljen'
 
     
 ##    geslo1 = request.forms.get('geslo1')
