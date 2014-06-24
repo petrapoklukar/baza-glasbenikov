@@ -81,56 +81,56 @@
         <div class="form-group">
           <label for="ime1" class="col-sm-2 control-label">Ime</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="ime1" placeholder="Vnesi ime">
+            <input type="text" class="form-control" id="ime1" name="ime1" placeholder="Vnesi ime">
           </div>
         </div>
 
         <div class="form-group">
           <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="priimek1" placeholder="Vnesi priimek">
+            <input type="text" class="form-control" id="priimek1" name="priimek1" placeholder="Vnesi priimek">
           </div>
         </div>
 
         <div class="form-group">
           <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
           <div class="col-sm-10">
-            <input type="email" class="form-control" id="mail1" placeholder="Vnesi elektronski naslov">
+            <input type="email" class="form-control" id="mail1" name="mail1" placeholder="Vnesi elektronski naslov" required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="letorojstva" placeholder="Vnesi letnico">
+            <input type="text" class="form-control" id="letorojstva" name="letorojstva" placeholder="Vnesi letnico" required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="username1" placeholder="Vnesi uporabniško ime">
+            <input type="text" class="form-control" id="username1" name="username1" placeholder="Vnesi uporabniško ime" required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
           <div class="col-sm-10">
-            <input type="password" class="form-control" id="geslo1" placeholder="Vnesi geslo">
+            <input type="password" class="form-control" id="geslo1" name="geslo1" placeholder="Vnesi geslo" required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="geslo2" class="col-sm-2 control-label">Ponovi geslo</label>
           <div class="col-sm-10">
-            <input type="password" class="form-control" id="geslo1+2" placeholder="Ponovi geslo">
+            <input type="password" class="form-control" id="geslo2" name="geslo2" placeholder="Ponovi geslo" required>
           </div>
         </div>
 
         <div class="form-group">
           <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
             <div class="col-sm-10">
-              <select class="form-control" name='spol'>
+              <select class="form-control" name='spol' required>
                   %for ime in spol:
                     <option>{{ime[0]}}</option>
                   %end
@@ -141,7 +141,7 @@
         <div class="form-group">
           <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
             <div class="col-sm-10">
-              <select class="form-control" name='stopnja'>
+              <select class="form-control" name='stopnja' required>
                   %for ime in stopnja:
                     <option>{{ime[0]}}</option>
                   %end
@@ -152,7 +152,7 @@
         <div class="form-group">
           <label for="instrument" class="col-sm-2 control-label">Inštrument, ki ga igraš</label>
             <div class="col-sm-10">
-              <select class="form-control" id='instrument' name='instrument'>
+              <select class="form-control" id='instrument' name='instrument' required>
                 <option id="disa" value="" selected disabled>Izberi inštrument</option>
                   %for ime in uporabnik:
                     <option>{{ime[0]}}</option>
@@ -164,7 +164,7 @@
           <div class="form-group">
             <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
               <div class="col-sm-10">
-                <select class="form-control" id='obcina' name='obcina'>
+                <select class="form-control" id='obcina' name='obcina' required>
                   <option id="disa" selected disabled>Izberi občino</option>
                     %for ime in obcina:
                       <option>{{ime[0]}}</option>
@@ -176,7 +176,7 @@
           <div class="form-group">
             <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
               <div class="col-sm-10">
-                <select class="form-control" name='zanr' id='zanr'>
+                <select class="form-control" name='zanr' id='zanr' required>
                     <option id="bodisiv" selected disabled>Izberi žanr</option>
                     %for ime in zanr:
                       <option>{{ime[0]}}</option>
@@ -188,8 +188,8 @@
           <div class="form-group">
             <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
               <div class="col-sm-10">
-                <input type="radio" name="isceskupino" value="ne"> Ne
-                <input type="radio" name="isceskupino" value="da"> Da
+                <input type="radio" name="isceskupino" value="ne" required> Ne
+                <input type="radio" name="isceskupino" value="da" required> Da
               </div>
           </div>
 

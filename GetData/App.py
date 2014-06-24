@@ -45,6 +45,7 @@ def main():
     CurSpol.execute("SELECT spol FROM spol")
     CurZanr2.execute("SELECT ime FROM zanr ORDER BY ime")
     CurObcina2.execute("SELECT ime FROM obcina ORDER BY ime")
+    print(CurObcina.fetchall())
     tmp = template('main.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
                    obcina2=CurObcina2)
@@ -102,6 +103,7 @@ def uporabnik():
     geslo = request.forms.get('geslo')
     return template('uporabnik.html', uporime=uporime)
 
+
 @post('/signin')
 @route('/signin')
 @route('/signin/')
@@ -112,10 +114,18 @@ def signin():
     stopnja = request.forms.get('stopnja')
     spol = request.forms.get('spol')
     isceskupino = request.forms.get('isceskupino')
+    ime1 = request.forms.get('ime1')
+    priimek1 = request.forms.get('priimek1')
+    mail1 = request.forms.get('mail1')
+    leorojstva = request.forms.get('letorojstva')
+    uporime = request.forms.get('username1')
+    geslo1 = request.forms.get('geslo1')
+    geslo2 = request.forms.get('geslo2')
+    
     seznam = [('Igra inšturment: ',instrument), ('Deluje v okolici občine: ',obcina),
               ('Igra žanr: ', zanr), ('Stopnja znanja: ', stopnja), ('Spol: ',spol),
               ('Išče skupino: ', isceskupino)]
-    return 'zdaj si prijavljen'
+    return template('uporabnik.html', uporime=uporime)
 
     
 ##    geslo1 = request.forms.get('geslo1')

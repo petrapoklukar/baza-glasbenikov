@@ -5816,3 +5816,28 @@ select option[disabled]:first-child { display: none; }
 /*# sourceMappingURL=bootstrap.css.map */
 
 
+textarea:required:focus,
+input[type="text"]:required:focus,  
+input[type="password"]:required:focus,
+input[type="datetime"]:required:focus,
+input[type="datetime-local"]:required:focus,
+input[type="date"]:required:focus,
+input[type="month"]:required:focus,
+input[type="time"]:required:focus,
+input[type="week"]:required:focus,
+input[type="number"]:required:focus,
+input[type="email"]:required:focus,
+input[type="url"]:required:focus,
+input[type="search"]:required:focus,
+input[type="tel"]:required:focus,
+input[type="color"]:required:focus,
+.uneditable-input:required:focus {
+    border-color: rgba(18, 140, 32, 0.6); /* green */
+    outline: 0;
+    outline: thin dotted \9;
+    /* IE6-9 */
+
+   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(18, 140, 32, 0.6);
+      -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(18, 140, 32, 0.6);
+           box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(18, 140, 32, 0.6);
+ }
