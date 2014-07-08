@@ -5810,6 +5810,11 @@ button.close {
   background-color : #F1F7EB;
 }
 
+#spremeni {
+  position: absolute;
+  right: 10px;
+}
+
 select option { color: black; }
 select.empty { color: #999; } 
 select option[disabled]:first-child { display: none; } 

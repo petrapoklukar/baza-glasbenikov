@@ -78,6 +78,174 @@
     </div>
   
 
+<div class="row">
+    
+    <div class="col-md-1">
+    </div>
+    
+    
+    <div class="col-md-10">
+      
+      <form class="form-horizontal" role="form" action="/signin" method="post">    
+        <div class="form-group">
+          <label for="ime1" class="col-sm-2 control-label">Ime</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJE IME</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ PRIIMEK</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ email</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJA LETNICA</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ USERNAME</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          
+        </div>
+
+        <div class="form-group">
+          <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ SPOL</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+        </div> 
+
+          <div class="form-group">
+            <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
+            <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ občina delovanja</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
+              <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJ zanr</p>
+          </div>
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          </div>
+        
+          <div class="form-group">
+            <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
+              <div class="col-sm-9">
+                <input type="radio" name="isceskupino" value="ne" required> Ne
+                <input type="radio" name="isceskupino" value="da" required> Da
+              </div>
+              <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          </div>
+
+
+          
+          <br>
+
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+    
+    
+  </div> 
+
+  <div class="row">
+
+
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+
+    <table class="table table-hover">
+      <tr>
+        <th class="col-sm-2">#</th>
+        <th class="col-md-3">Inštrument, ki ga igraš</th>
+        <th class="col-md-3">Stopnja znanja</th>
+        <th class="col-md-3">Leto začetka igranja</th>
+        <th class="col-md-1">&nbsp;</th>
+      </tr>
+
+      %for (instrument,stopnja,leto) in TabelaInstrumentov:
+      <tr>
+        <td>cifra</td>
+        <td>{{instrument}}</td>
+        <td>{{stopnja}}</td>
+        <td>{{leto}}</td>
+        <td>
+          <form method="post">
+             <p><input type="hidden" name="delete" value="{{id}}"/>
+             <input type="submit" value="Izbriši" name="submit"/></p>
+          </form>
+       </td>
+      </tr>
+      %end 
+  
+    </table>
+    
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+  </div>
+
+
 
     <div class="row">
     <div class="col-md-1"></div>

@@ -5,7 +5,7 @@ import psycopg2, psycopg2.extensions, psycopg2.extras
 # KONFIGURACIJA
 
 psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo problemov s sumniki
-conn = psycopg2.connect(database='seminarska_roki', host='audrey.fmf.uni-lj.si', user='roki', password='stargate')
+conn = psycopg2.connect(database='seminarska_matjazz', host='audrey.fmf.uni-lj.si', user='matjazz', password='marmelada')
 conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT) # onemogocimo transakcije
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurObcina = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -14,6 +14,7 @@ CurStopnja = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurSpol = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurZanr2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurObcina2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+CurTabelaInstrumentov = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
 # Static Routes
@@ -45,7 +46,6 @@ def main():
     CurSpol.execute("SELECT spol FROM spol")
     CurZanr2.execute("SELECT ime FROM zanr ORDER BY ime")
     CurObcina2.execute("SELECT ime FROM obcina ORDER BY ime")
-    print(CurObcina.fetchall())
     tmp = template('main.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
                    obcina2=CurObcina2)
@@ -101,7 +101,8 @@ def noviuporabnik():
 def uporabnik():
     uporime = request.forms.get('uporime')
     geslo = request.forms.get('geslo')
-    return template('uporabnik.html', uporime=uporime)
+    CurTabelaInstrumentov.execute("SELECT (glasbilo, stopnja_znanja, leto_zacetka) FROM igra_poje WHERE glasbenik=(?) ", [uporime])
+    return template('uporabnik.html', uporime=uporime, )
 
 
 @post('/signin')
