@@ -4,7 +4,7 @@ CREATE TABLE glasbenik (
 	uporabnisko_ime TEXT PRIMARY KEY,
 	ime TEXT, 
 	priimek TEXT,
-	spol TEXT NOT NULL, 
+	spol TEXT NOT NULL REFERENCES spol(spol), 
 	e_mail TEXT NOT NULL,
 	leto_rojstva INTEGER NOT NULL
 );
