@@ -9,6 +9,13 @@ CREATE TABLE glasbenik (
 	leto_rojstva INTEGER NOT NULL
 );
 
+-- Dodatna tabela, ki smo jo pozabili prej naredit
+CREATE TABLE glasbenik_igra_zanr (
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	igra_zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
+	PRIMARY KEY (glasbenik, igra_zanr)
+);
+
 -- Glasbenik mora imeti možnost izbiranja med večimi žanri, zato ne more imeti atributa isce_skupino_ki_igra_zanr ker bi potem lahko izbral samo enega. 
 -- Če se izbriše glasbenika, potem on ne išče več skupine
 CREATE TABLE glasbenik_isce_skupino (
