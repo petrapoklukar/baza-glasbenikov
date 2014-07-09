@@ -15,6 +15,8 @@ CurSpol = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurZanr2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurObcina2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurTabelaInstrumentov = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+CurUporabnik = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+CurIskanjeGlasbenika = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 
 # Static Routes
@@ -49,20 +51,40 @@ def main():
     tmp = template('main.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
                    obcina2=CurObcina2)
+    
+    
     return tmp
 
 @post('/iskanjeglasbenika')
 def iskanje():
+    s = """SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
+        leto_zacetka, obcina, igra_zanr, zanr AS isce_skupino_ki_igra FROM glasbenik
+        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
+        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
+        WHERE glasbilo = %s AND obcina = %s AND igra_zanr = %s
+        AND stopnja_znanja = %s AND spol = %s"""
+    
     instrument = request.forms.get('instrument')
+    if instrument == None: instrument = 'TRUE'
     obcina = request.forms.get('obcina')
     zanr = request.forms.get('zanr')
     stopnja = request.forms.get('stopnja')
     spol = request.forms.get('spol')
     isceskupino = request.forms.get('isceskupino')
-    seznam = [('Igra inšturment: ',instrument), ('Deluje v okolici občine: ',obcina),
-              ('Igra žanr: ', zanr), ('Stopnja znanja: ', stopnja), ('Spol: ',spol),
-              ('Išče skupino: ', isceskupino)]
-    return template('iskanjeglasbenika.html', seznam=seznam)
+    
+
+    CurIskanjeGlasbenika.execute("""SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
+        leto_zacetka, obcina, igra_zanr, zanr AS isce_skupino_ki_igra FROM glasbenik
+        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
+        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
+        WHERE glasbilo = %s AND obcina = %s AND igra_zanr = %s
+        AND stopnja_znanja = %s AND spol = %s """, (instrument, obcina, zanr, stopnja, spol, ))    
+    
+    return template('iskanjeglasbenika.html', IskanjeGlasbenika = CurIskanjeGlasbenika)
 
 @post('/iskanjeskupine')
 def iskanje():
@@ -90,6 +112,7 @@ def noviuporabnik():
     CurZanr.execute("SELECT ime FROM zanr ORDER BY ime")
     CurStopnja.execute("SELECT stopnja FROM stopnja_znanja")
     CurSpol.execute("SELECT spol FROM spol")
+    
     return template('signin.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol)
     
@@ -101,14 +124,22 @@ def noviuporabnik():
 def uporabnik():
     uporime = request.forms.get('uporime')
     geslo = request.forms.get('geslo')
-    CurTabelaInstrumentov.execute("SELECT (glasbilo, stopnja_znanja, leto_zacetka) FROM igra_poje WHERE glasbenik=(?) ", [uporime])
-    return template('uporabnik.html', uporime=uporime, )
+    CurTabelaInstrumentov.execute("SELECT glasbilo, stopnja_znanja, leto_zacetka FROM igra_poje WHERE glasbenik = %s ", (uporime,))
+    CurUporabnik.execute("""SELECT DISTINCT ime, priimek, e_mail, leto_rojstva, uporabnisko_ime, spol, obcina, igra_zanr, zanr FROM glasbenik
+        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
+        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
+        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
+        WHERE uporabnisko_ime = %s""", (uporime,))
+    #print(CurUporabnik.fetchall())
+    return template('uporabnik.html', uporime=uporime, TabelaInstrumentov=CurTabelaInstrumentov, Uporabnik=CurUporabnik)
 
 
 @post('/signin')
 @route('/signin')
 @route('/signin/')
 def signin():
+    krof = False
     instrument = request.forms.get('instrument')
     obcina = request.forms.get('obcina')
     zanr = request.forms.get('zanr')
@@ -118,15 +149,15 @@ def signin():
     ime1 = request.forms.get('ime1')
     priimek1 = request.forms.get('priimek1')
     mail1 = request.forms.get('mail1')
-    leorojstva = request.forms.get('letorojstva')
+    letorojstva = request.forms.get('letorojstva')
     uporime = request.forms.get('username1')
     geslo1 = request.forms.get('geslo1')
     geslo2 = request.forms.get('geslo2')
-    
-    seznam = [('Igra inšturment: ',instrument), ('Deluje v okolici občine: ',obcina),
-              ('Igra žanr: ', zanr), ('Stopnja znanja: ', stopnja), ('Spol: ',spol),
-              ('Išče skupino: ', isceskupino)]
-    return template('uporabnik.html', uporime=uporime)
+
+    Uporabnik = [[ime1, priimek1, mail1, letorojstva, uporime, spol, obcina, zanr, isceskupino]]
+    CurTabelaInstrumentov.execute("SELECT glasbilo, stopnja_znanja, leto_zacetka FROM igra_poje WHERE glasbenik = %s ", (uporime,))
+
+    return template('uporabnik.html', uporime=uporime, TabelaInstrumentov=CurTabelaInstrumentov, Uporabnik=Uporabnik)
 
     
 ##    geslo1 = request.forms.get('geslo1')

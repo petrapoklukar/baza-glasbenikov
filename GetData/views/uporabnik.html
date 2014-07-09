@@ -86,14 +86,17 @@
     
     <div class="col-md-10">
       
+
+      %for element in Uporabnik:
+
       <form class="form-horizontal" role="form" action="/signin" method="post">    
         <div class="form-group">
           <label for="ime1" class="col-sm-2 control-label">Ime</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJE IME</p>
+            <p class="form-control-static">{{element[0]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
           </div>
 
         </div>
@@ -101,7 +104,7 @@
         <div class="form-group">
           <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ PRIIMEK</p>
+            <p class="form-control-static">{{element[1]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -111,7 +114,7 @@
         <div class="form-group">
           <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ email</p>
+            <p class="form-control-static">{{element[2]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -121,7 +124,7 @@
         <div class="form-group">
           <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJA LETNICA</p>
+            <p class="form-control-static">{{element[3]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -131,7 +134,7 @@
         <div class="form-group">
           <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ USERNAME</p>
+            <p class="form-control-static">{{element[4]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -152,7 +155,7 @@
         <div class="form-group">
           <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
           <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ SPOL</p>
+            <p class="form-control-static">{{element[5]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -162,7 +165,7 @@
           <div class="form-group">
             <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
             <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ občina delovanja</p>
+            <p class="form-control-static">{{element[6]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -172,7 +175,7 @@
           <div class="form-group">
             <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
               <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJ zanr</p>
+            <p class="form-control-static">{{element[7]}}</p>
           </div>
           <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
@@ -182,13 +185,17 @@
           <div class="form-group">
             <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
               <div class="col-sm-9">
-                <input type="radio" name="isceskupino" value="ne" required> Ne
-                <input type="radio" name="isceskupino" value="da" required> Da
+                %if element[8] == None or element[8] == 'ne':
+                <p class="form-control-static">Ne</p>
+                %else:
+                <p class="form-control-static">Da</p>
+                %end
               </div>
               <div class="col-sm-1" id="spremeni">
             <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
           </div>
           </div>
+          %end
 
 
           
@@ -221,12 +228,12 @@
         <th class="col-md-1">&nbsp;</th>
       </tr>
 
-      %for (instrument,stopnja,leto) in TabelaInstrumentov:
+      %for cifra, element in enumerate(TabelaInstrumentov):
       <tr>
-        <td>cifra</td>
-        <td>{{instrument}}</td>
-        <td>{{stopnja}}</td>
-        <td>{{leto}}</td>
+        <td>{{cifra}}</td>
+        <td>{{element[0]}}</td>
+        <td>{{element[1]}}</td>
+        <td>{{element[2]}}</td>
         <td>
           <form method="post">
              <p><input type="hidden" name="delete" value="{{id}}"/>
@@ -235,6 +242,7 @@
        </td>
       </tr>
       %end 
+  
   
     </table>
     
