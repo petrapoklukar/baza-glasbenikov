@@ -27,23 +27,24 @@
   </head>
 
   <body>
-  	<div class="row">
-  		<div class="col-md-1"></div>
-  			<div class="col-md-10">
-  				<div class="page-header">
-  					<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
-  				</div>
-  			</div>
-  		<div class="col-md-1"></div>
-  	</div>
 
-      <div class="row">
+  <div class="row">
+    <div class="col-md-1"></div>
+    	<div class="col-md-10">
+        	<div class="page-header">
+            	<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+            </div>
+        </div>
+    <div class="col-md-1"></div>
+  </div>
+
+  <div class="row">
     <div class="col-md-1">
     </div>
 
     <div class="col-md-10">
-      
-     <div class="btn-group btn-group-justified"> 
+
+     <div class="btn-group btn-group-justified">
         <div class="btn-group">
           <form role="form" action="/" method="get">
             <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
@@ -56,32 +57,45 @@
           </form>
         </div>
       </div>
-      
+
+
       <hr id="prijava">
-      <br> 
+      <br>
 
     </div>
-    
+
     <div class="col-md-1">
-    </div>  
-    
-  </div> 
+    </div>
+
+  </div>
 
 
 <div class="row">
-    
+
     <div class="col-md-1">
     </div>
-    
+
+
     <div class="col-md-3">
     </div>
 
     <div class="col-md-4">
-      
 
+
+		<!--
         <form class="form-signin" role="form" action="/uporabnik" method="post">
+        -->
+        <form class="form-signin" role="form" action="/login" method="post">
           <h3 class="form-signin-heading">Log in</h3>
-          <input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime" required autofocus>
+          %if napaka:
+          <div class="alert alert-warning">{{napaka}}</div>
+          %end
+          <input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime"
+          		%if uporime:
+         		value="{{uporime}}"
+          		%end
+          		name="uporime"
+          		required autofocus>
           <input type="password" name="geslo" class="form-control" placeholder="Geslo" required>
           <label class="checkbox">
             <input type="checkbox" value="remember-me"> Remember me
@@ -89,40 +103,44 @@
           <button class="btn btn-primary btn-block" type="submit">Log in</button>
         </form>
 
-      
+
     </div>
 
     <div class="col-md-3">
     </div>
-    
+
+
 
     <div class="col-md-1">
     </div>
-    
-  </div> 
+
+  </div>
+
 
 
 
   <div class="row">
-    
+
+
     <div class="col-md-1">
     </div>
-    
+
+
     <div class="col-md-10">
       <footer>
         <hr>
         <p>&copy; PetraP & RokI & MatjazZ 2014</p>
         </footer>
     </div>
-    
+
     <div class="col-md-1">
     </div>
 
   </div> <!-- /container -->
 
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->      
+	<!-- Bootstrap core JavaScript
+	================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="../../dist/js/bootstrap.min.js"></script>

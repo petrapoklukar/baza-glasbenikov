@@ -36,39 +36,39 @@
 			</div>
 		<div class="col-md-1"></div>
 	</div>
-	
+
 
 	<div class="row">
 		<div class="col-md-1">
 		</div>
 
 		<div class="col-md-10">
-			
-			<div class="btn-group btn-group-justified"> 
+
+			<div class="btn-group btn-group-justified">
 				<div class="btn-group">
-					<form role="form" action="/login" method="post">
+					<form role="form" action="/login" method="get">
 				    	<button type="submit" class="btn btn-default" id="meni1" >Log in</button>
 				    </form>
 				</div>
-			
+
 				<div class="btn-group">
 					<form role="form" action="/noviuporabnik" method="post">
 				    	<button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
 				    </form>
 				</div>
 			</div>
-			
+
 			<hr id="prijava">
-			<br> 
+			<br>
 
 		</div>
-		
+
 		<div class="col-md-1">
-		</div>	
+		</div>
 
-	</div> 
+	</div>
 
-	
+
 	<div class="row">
 		<div class="col-md-1"></div>
 			<div class="col-md-5">
@@ -94,7 +94,7 @@
 									%end
 							</select>
 					  	</div>
-					  	
+
 					  	<div class="form-group">
 							<label for="zanrglasbenika">Žanr glasbenika</label>
 							<!-- <input type="zanrglasbenika" class="form-control" id="zanrglasbenika" placeholder="Izberi žanr"> -->
@@ -105,7 +105,7 @@
 									%end
 							</select>
 					  	</div>
-					  
+
 					  	<div class="form-group">
 							<label for="stopnjaznanja">Stopnja znanja glasbenika</label>
 							<select class="form-control" name='stopnja'>
@@ -114,7 +114,7 @@
 									%end
 							</select>
 						</div>
-		
+
 						<div class="form-group">
 							<label for="spolglasbenika"><SPAN></SPAN>pol</label>
 							<select class="form-control" name='spol'>
@@ -122,8 +122,8 @@
 										<option>{{ime[0]}}</option>
 									%end
 							</select>
-						</div> 
-					  	
+						</div>
+
 					  	<div>
 							<b>Ali glasbenik išče skupino? </b>
 								<input type="radio" name="isceskupino" value="ne"> Ne
@@ -131,9 +131,9 @@
 					  	</div>
 					  	<br>
 					  	<button type="submit" class="btn btn-primary">Išči</button>
-					</form>	
+					</form>
 			</div>
-			
+
 			<div class="col-md-5">
 				<h4 id="isci"><b>Išči skupine</b></h4>
 				<hr id="isci1">
@@ -147,7 +147,7 @@
 									%end
 							</select>
 						</div>
-						
+
 						<div class="form-group">
 							<label for="zanrskupine">Žanr skupine</label>
 							<select class="form-control" name='zanr2'>
@@ -156,8 +156,8 @@
 										<option>{{ime[0]}}</option>
 									%end
 							</select>
-						</div> 
-						
+						</div>
+
 						<div>
 							<b>Ali skupine išče člane? </b>
 								<input type="radio" name="isceclane" value="ne"> Ne
@@ -169,8 +169,8 @@
 			</div>
 		<div class="col-md-1"></div>
 	</div>
-	
-	
+
+
 	<div class="row">
 		<div class="col-md-1"></div>
 			<div class="col-md-10">
