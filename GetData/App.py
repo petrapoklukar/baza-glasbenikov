@@ -1,7 +1,10 @@
+﻿# -*- coding: <utf-8> -*-
 import bottle
 import sqlite3
 import psycopg2, psycopg2.extensions, psycopg2.extras
 import hashlib # računanje MD5 kriptografski hash za gesla
+
+
 
 # KONFIGURACIJA
 
@@ -127,13 +130,13 @@ def iskanje():
         WHERE glasbilo = %s AND obcina = %s AND igra_zanr = %s
         AND stopnja_znanja = %s AND spol = %s"""
     
-    instrument = bottle.request.forms.get('instrument')
+    instrument = bottle.request.forms.getunicode('instrument')
     if instrument == None: instrument = 'TRUE'
-    obcina = bottle.request.forms.get('obcina')
-    zanr = bottle.request.forms.get('zanr')
-    stopnja = bottle.request.forms.get('stopnja')
-    spol = bottle.request.forms.get('spol')
-    isceskupino = bottle.request.forms.get('isceskupino')
+    obcina = bottle.request.forms.getunicode('obcina')
+    zanr = bottle.request.forms.getunicode('zanr')
+    stopnja = bottle.request.forms.getunicode('stopnja')
+    spol = bottle.request.forms.getunicode('spol')
+    isceskupino = bottle.request.forms.getunicode('isceskupino')
 
     
     CurIskanjeGlasbenika.execute("""SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
@@ -177,10 +180,10 @@ def logout():
 def login_post():
     """Obdelaj izpolnjeno formo za prijavo"""
     # Uporabniško ime, ki ga je uporabnik vpisal v formo
-    username = bottle.request.forms.get('uporime')
+    username = bottle.request.forms.getunicode('uporime')
    
     # Izračunamo MD5 has gesla, ki ga bomo spravili
-    password = password_md5(bottle.request.forms.get('geslo'))
+    password = password_md5(bottle.request.forms.getunicode('geslo'))
     # Preverimo, ali se je uporabnik pravilno prijavil
     
     CurVpis.execute("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s AND geslo=%s",
@@ -247,19 +250,19 @@ def uporabnik():
 @bottle.route('/signin/')
 def signin():
     krof = False
-    instrument = bottle.request.forms.get('instrument')
-    obcina = bottle.request.forms.get('obcina')
-    zanr = bottle.request.forms.get('zanr')
-    stopnja = bottle.request.forms.get('stopnja')
-    spol = bottle.request.forms.get('spol')
-    isceskupino = bottle.request.forms.get('isceskupino')
-    ime1 = bottle.request.forms.get('ime1')
-    priimek1 = bottle.request.forms.get('priimek1')
-    mail1 = bottle.request.forms.get('mail1')
-    letorojstva = bottle.request.forms.get('letorojstva')
-    uporime = bottle.request.forms.get('username1')
-    geslo1 = bottle.request.forms.get('geslo1')
-    geslo2 = bottle.request.forms.get('geslo2')
+    instrument = bottle.request.forms.getunicode('instrument')
+    obcina = bottle.request.forms.getunicode('obcina')
+    zanr = bottle.request.forms.getunicode('zanr')
+    stopnja = bottle.request.forms.getunicode('stopnja')
+    spol = bottle.request.forms.getunicode('spol')
+    isceskupino = bottle.request.forms.getunicode('isceskupino')
+    ime1 = bottle.request.forms.getunicode('ime1')
+    priimek1 = bottle.request.forms.getunicode('priimek1')
+    mail1 = bottle.request.forms.getunicode('mail1')
+    letorojstva = bottle.request.forms.getunicode('letorojstva')
+    uporime = bottle.request.forms.getunicode('username1')
+    geslo1 = bottle.request.forms.getunicode('geslo1')
+    geslo2 = bottle.request.forms.getunicode('geslo2')
 
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     CurObcina.execute("SELECT ime FROM obcina ORDER BY ime")
@@ -286,8 +289,9 @@ def signin():
     else:
         # Vse je v redu, vstavi novega uporabnika v bazo
         #password = password_md5(password1)
+        
         CurRegistracija2.execute("""INSERT INTO glasbenik (uporabnisko_ime, ime, priimek, spol, e_mail, leto_rojstva, geslo)
-                                VALUES (%s, %s, %s, %s, %s, %s, %s)""",(uporime, ime1, priimek1, spol, mail1, letorojstva, geslo1))
+                                VALUES (%s, %s, %s, %s, %s, %s, %s)""",(uporime, ime1, priimek1, spol, mail1, letorojstva, password_md5(geslo1)))
 
         CurRegistracija3.execute("""INSERT INTO igra_poje (glasbenik, glasbilo, stopnja_znanja, leto_zacetka)
                                 VALUES (%s, %s, %s, %s)""", (uporime, instrument, stopnja, None))
@@ -303,7 +307,7 @@ def signin():
                                 VALUES (%s, %s)""", (uporime, obcina))
         
         # Daj uporabniku cookie
-        bottle.response.set_cookie('username', username, path='/', secret=secret)
+        bottle.response.set_cookie('username', uporime, path='/', secret=secret)
         bottle.redirect("/uporabnik") #to je uporabil bauer-redirect
     
     #return bottle.template('uporabnik.html', uporime=uporime, TabelaInstrumentov=CurTabelaInstrumentov, Uporabnik=Uporabnik)
@@ -321,7 +325,7 @@ def signin():
     
     
 
-bottle.run(host='localhost', port=5432, debug=True)
+bottle.run(host='localhost', port=8080, debug=True)
 
 conn.commit()
 conn.close()
