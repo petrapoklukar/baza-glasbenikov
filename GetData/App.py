@@ -18,6 +18,7 @@ CurStopnja = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurSpol = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurZanr2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurObcina2 = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+CurIsce = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurTabelaInstrumentov = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurUporabnik = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 CurIskanjeGlasbenika = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -110,9 +111,10 @@ def main():
     CurSpol.execute("SELECT spol FROM spol")
     CurZanr2.execute("SELECT ime FROM zanr ORDER BY ime")
     CurObcina2.execute("SELECT ime FROM obcina ORDER BY ime")
+    CurIsce.execute("SELECT ime FROM zanr ORDER BY ime")
     tmp = bottle.template('main.html', uporabnik=cur, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
-                   obcina2=CurObcina2)
+                   obcina2=CurObcina2, isce = CurIsce)
     
     
     return tmp
@@ -121,32 +123,53 @@ def main():
 
 @bottle.post('/iskanjeglasbenika')
 def iskanje():
-    s = """SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
-        leto_zacetka, obcina, igra_zanr, zanr AS isce_skupino_ki_igra FROM glasbenik
-        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
-        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
-        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
-        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
-        WHERE glasbilo = %s AND obcina = %s AND igra_zanr = %s
-        AND stopnja_znanja = %s AND spol = %s"""
     
     instrument = bottle.request.forms.getunicode('instrument')
-    if instrument == None: instrument = 'TRUE'
     obcina = bottle.request.forms.getunicode('obcina')
     zanr = bottle.request.forms.getunicode('zanr')
     stopnja = bottle.request.forms.getunicode('stopnja')
     spol = bottle.request.forms.getunicode('spol')
-    isceskupino = bottle.request.forms.getunicode('isceskupino')
+    isceskupino = bottle.request.forms.getunicode('isce')
 
+    zadetki = (instrument, obcina, zanr, stopnja, spol, isceskupino)
     
-    CurIskanjeGlasbenika.execute("""SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
+    select_stavek = """SELECT DISTINCT uporabnisko_ime, ime, priimek, spol, e_mail, glasbilo, stopnja_znanja, 
         leto_zacetka, obcina, igra_zanr, zanr AS isce_skupino_ki_igra FROM glasbenik
         JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
         JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
         JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
-        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
-        WHERE glasbilo = %s AND obcina = %s AND igra_zanr = %s
-        AND stopnja_znanja = %s AND spol = %s """, (instrument, obcina, zanr, stopnja, spol, ))    
+        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime WHERE"""
+    
+    if zadetki[0] != None:
+        select_stavek = select_stavek+" glasbilo = %s AND"
+    if zadetki[1] != None:
+        select_stavek = select_stavek+" obcina = %s AND"
+    if zadetki[2] != None:
+        select_stavek = select_stavek+" igra_zanr = %s AND"    
+    if zadetki[3] != None:
+        select_stavek = select_stavek+" stopnja_znanja = %s AND"
+    if zadetki[4] != None:
+        select_stavek = select_stavek+" spol = %s AND"
+    if zadetki[5] != None:
+        select_stavek = select_stavek+" zanr = %s AND"
+    #if zadetki[0] != None or zadetki[1] != None or zadetki[2] != None or zadetki[3] != None or zadetki[4] != None or zadetki[5] != None:
+    #    select_stavek = select_stavek+" TRUE"
+    select_stavek = select_stavek+" TRUE"
+    
+    #print(select_stavek)
+    
+    parametri = []
+    for i in zadetki:
+        if i != None:
+            parametri.append(i)
+    parametri = tuple(parametri)
+
+    #print(parametri)
+    
+    CurIskanjeGlasbenika.execute(select_stavek, (parametri))
+    
+    #IskanjeGlasbenika = CurIskanjeGlasbenika.fetchall()
+    #print(type(CurIskanjeGlasbenika.fetchall()))
     
     return bottle.template('iskanjeglasbenika.html', IskanjeGlasbenika = CurIskanjeGlasbenika)
 
@@ -264,6 +287,8 @@ def signin():
     geslo1 = bottle.request.forms.getunicode('geslo1')
     geslo2 = bottle.request.forms.getunicode('geslo2')
 
+    print(uporime)
+    
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     CurObcina.execute("SELECT ime FROM obcina ORDER BY ime")
     CurZanr.execute("SELECT ime FROM zanr ORDER BY ime")

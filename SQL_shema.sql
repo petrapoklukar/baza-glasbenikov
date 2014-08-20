@@ -37,7 +37,7 @@ CREATE TABLE igra_poje (
 glasbenik TEXT REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
 glasbilo TEXT REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
 stopnja_znanja TEXT NOT NULL REFERENCES stopnja_znanja(stopnja), -- na voljo bodo samo tri moznosti: beginner, intermediate, advanced
-leto_zacetka INTEGER,
+leto_zacetka INTEGER NOT NULL,
 PRIMARY KEY (glasbenik, glasbilo)
 );
 
