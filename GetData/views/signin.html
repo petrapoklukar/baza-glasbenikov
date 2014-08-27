@@ -28,255 +28,238 @@
 
   <body>
 
-  <div class="row">
-  		<div class="col-md-1"></div>
-         <div class="col-md-10">
-            <div class="page-header">
-               <h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+    <div class="row">
+    		<div class="col-md-1"></div>
+           <div class="col-md-10">
+              <div class="page-header">
+                 <h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+              </div>
+           </div>
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+
+          <div class="col-md-10">
+
+            <div class="btn-group btn-group-justified">
+
+              <div class="btn-group">
+                <form role="form" action="/" method="get">
+                  <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+                </form>
+              </div>
+
+              <div class="btn-group">
+                <form role="form" action="/login" method="get">
+                  <button type="submit" class="btn btn-default" id="meni1" >Log in</button>
+                </form>
+              </div>
             </div>
-         </div>
+
+            <hr id="prijava">
+            <br>
+
+          </div>
+
+        <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+
       <div class="col-md-1"></div>
-   </div>
 
-      <div class="row">
-    <div class="col-md-1">
-    </div>
+        <div class="col-md-10">
 
-    <div class="col-md-10">
-
-
-     <div class="btn-group btn-group-justified">
-
-        <div class="btn-group">
-          <form role="form" action="/" method="get">
-            <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+          <form class="form-horizontal" role="form" action="/signin" method="post">
+            <h2 class="form-signin-heading">Registracija</h2>
+              %if napaka:
+                <div class="alert alert-warning">{{napaka}}</div>
+              %end
           </form>
         </div>
-
-        <div class="btn-group">
-          <form role="form" action="/login" method="get">
-            <button type="submit" class="btn btn-default" id="meni1" >Log in</button>
-          </form>
-        </div>
-      </div>
-
-
-      <hr id="prijava">
-      <br>
-
+        
+      <div class="col-md-1"></div>
     </div>
 
-    <div class="col-md-1">
-    </div>
+    <div class="row">
 
-  </div>
+      <div class="col-md-1"></div>
 
+        <div class="col-md-10">
+          <form class="form-horizontal" role="form" action="/signin" method="post">
 
-<div class="row">
-
-    <div class="col-md-1">
-    </div>
-
-
-    <div class="col-md-10">
-
-      <form class="form-horizontal" role="form" action="/signin" method="post">
-        <h2 class="form-signin-heading">Registracija</h2>
-        %if napaka:
-        <div class="alert alert-warning">{{napaka}}</div>
-        %end
-    </div>
-    <div class="col-md-1">
-    </div>
-  </div>
-
-
-<div class="row">
-
-    <div class="col-md-1">
-    </div>
-
-
-    <div class="col-md-10">
-
-      <form class="form-horizontal" role="form" action="/signin" method="post">
-
-        <div class="form-group">
-          <label for="ime1" class="col-sm-2 control-label">Ime</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="ime1" name="ime1" placeholder="Vnesi ime"
-				%if ime1:
-				value="{{ime1}}"
-				%end
-				>
-          </div>
-        </div>
-		<br>
-
-        <div class="form-group">
-          <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
-          <div class="col-sm-10">
-
-            <input type="text" class="form-control" id="priimek1" name="priimek1" placeholder="Vnesi priimek"
-               %if priimek1:
-               value="{{priimek1}}"
-               %end
-               >
-          </div>
-        </div>
-		<br>
-
-        <div class="form-group">
-          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
-          <div class="col-sm-10">
-            <input type="email" class="form-control" id="mail1" name="mail1" placeholder="Vnesi elektronski naslov"
-               %if mail1:
-               value="{{mail1}}"
-               %end
-               required>
-          </div>
-        </div>
-		<br>
-
-        <div class="form-group">
-          <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="letorojstva" name="letorojstva" placeholder="Vnesi letnico"
-               %if letorojstva:
-               value="{{letorojstva}}"
-               %end
-               required>
-          </div>
-        </div>
-        <br>
-
-        <div class="form-group">
-          <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="username1" name="username1" placeholder="Vnesi uporabniško ime"
-               %if uporime:
-               value="{{uporime}}"
-               %end
-               required>
-          </div>
-        </div>
-        <br>
-
-        <div class="form-group">
-          <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="geslo1" name="geslo1" placeholder="Vnesi geslo" required>
-          </div>
-        </div>
-        <br>
-
-        <div class="form-group">
-          <label for="geslo2" class="col-sm-2 control-label">Ponovi geslo</label>
-          <div class="col-sm-10">
-            <input type="password" class="form-control" id="geslo2" name="geslo2" placeholder="Ponovi geslo" required>
-          </div>
-        </div>
-        <br>
-
-        <div class="form-group">
-          <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
-            <div class="col-sm-10">
-              <select class="form-control" name='spol' required>
-                  %for ime in spol:
-                    <option>{{ime[0]}}</option>
-                  %end
-              </select>
-            </div>
-        </div>
-        <br>
-
-
-        <div class="form-group">
-          <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
-            <div class="col-sm-10">
-              <select class="form-control" name='stopnja' required>
-                  %for ime in stopnja:
-                    <option>{{ime[0]}}</option>
-                  %end
-              </select>
-            </div>
-        </div>
-        <br>
-
-        <div class="form-group">
-          <label for="instrument" class="col-sm-2 control-label">Inštrument, ki ga igraš</label>
-            <div class="col-sm-10">
-              <select class="form-control" id='instrument' name='instrument' required>
-                <option id="disa" value="" selected disabled>Izberi inštrument</option>
-                  %for ime in glasbilo:
-                    <option>{{ime[0]}}</option>
-                  %end
-              </select>
-            </div>
-        </div>
-        <br>
-
-          <div class="form-group">
-            <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
+            <div class="form-group">
+              <label for="ime1" class="col-sm-2 control-label">Ime</label>
               <div class="col-sm-10">
-                <select class="form-control" id='obcina' name='obcina' required>
-                  <option id="disa" selected disabled>Izberi občino</option>
-                    %for ime in obcina:
+                <input type="text" class="form-control" id="ime1" name="ime1" placeholder="Vnesi ime"
+          				%if ime1:
+          				value="{{ime1}}"
+          				%end
+          			>
+              </div>
+            </div>
+		        <br>
+
+            <div class="form-group">
+              <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
+              
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="priimek1" name="priimek1" placeholder="Vnesi priimek"
+                   %if priimek1:
+                   value="{{priimek1}}"
+                   %end
+                   >
+              </div>
+            </div>
+		        <br>
+
+            <div class="form-group">
+              <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+              <div class="col-sm-10">
+                <input type="email" class="form-control" id="mail1" name="mail1" placeholder="Vnesi elektronski naslov"
+                   %if mail1:
+                   value="{{mail1}}"
+                   %end
+                   required>
+              </div>
+            </div>
+		        <br>
+
+            <div class="form-group">
+              <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="letorojstva" name="letorojstva" placeholder="Vnesi letnico"
+                   %if letorojstva:
+                   value="{{letorojstva}}"
+                   %end
+                   required>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="username1" name="username1" placeholder="Vnesi uporabniško ime"
+                   %if uporime:
+                   value="{{uporime}}"
+                   %end
+                   required>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="geslo1" name="geslo1" placeholder="Vnesi geslo" required>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="geslo2" class="col-sm-2 control-label">Ponovi geslo</label>
+              <div class="col-sm-10">
+                <input type="password" class="form-control" id="geslo2" name="geslo2" placeholder="Ponovi geslo" required>
+              </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name='spol' required>
+                    %for ime in spol:
                       <option>{{ime[0]}}</option>
                     %end
-                </select>
-              </div>
-          </div>
-          <br>
+                  </select>
+                </div>
+            </div>
+            <br>
 
-
-          <div class="form-group">
-            <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
-              <div class="col-sm-10">
-                <select class="form-control" name='zanr' id='zanr' required>
-                    <option id="bodisiv" selected disabled>Izberi žanr</option>
-                    %for ime in zanr:
+            <div class="form-group">
+              <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name='stopnja' required>
+                    %for ime in stopnja:
                       <option>{{ime[0]}}</option>
                     %end
-                </select>
-              </div>
-          </div>
+                  </select>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="instrument" class="col-sm-2 control-label">Inštrument, ki ga igraš</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id='instrument' name='instrument' required>
+                    <option id="disa" value="" selected disabled>Izberi inštrument</option>
+                      %for ime in glasbilo:
+                        <option>{{ime[0]}}</option>
+                      %end
+                  </select>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id='obcina' name='obcina' required>
+                    <option id="disa" selected disabled>Izberi občino</option>
+                      %for ime in obcina:
+                        <option>{{ime[0]}}</option>
+                      %end
+                  </select>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
+                <div class="col-sm-10">
+                  <select class="form-control" name='zanr' id='zanr' required>
+                      <option id="bodisiv" selected disabled>Izberi žanr</option>
+                        %for ime in zanr:
+                          <option>{{ime[0]}}</option>
+                        %end
+                  </select>
+                </div>
+            </div>
+            <br>
+
+            <div class="form-group">
+              <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
+                <div class="col-sm-10">
+                  <input type="radio" name="isceskupino" value="ne" required> Ne
+                  <input type="radio" name="isceskupino" value="da" required> Da
+                </div>
+            </div>
+            <br>
+
           <br>
-
-
-          <div class="form-group">
-            <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
-              <div class="col-sm-10">
-                <input type="radio" name="isceskupino" value="ne" required> Ne
-                <input type="radio" name="isceskupino" value="da" required> Da
-              </div>
-          </div>
-          <br>
-
-
-          <br>
-
           <button type="submit" class="btn btn-primary">Sign in</button>
+          </form>
+        </div>
 
-
-
-
-
-  <div class="row">
-
-
-    <div class="col-md-1">
+      <div class="col-md-1"></div>
     </div>
 
-    <div class="col-md-10">
-      <footer>
-        <hr>
-        <p>&copy; PetraP & RokI & MatjazZ 2014</p>
-        </footer>
-    </div>
+    <div class="row">
 
-  </div> <!-- /container -->
+      <div class="col-md-1"></div>
 
+        <div class="col-md-10">
+          <footer>
+            <hr>
+            <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+          </footer>
+        </div>
+      <div class="col-md-1"></div>
+    </div> <!-- /container -->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

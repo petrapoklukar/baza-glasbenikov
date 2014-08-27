@@ -29,7 +29,7 @@
   <body>
   	<div class="row">
   		<div class="col-md-1"></div>
-  			<div class="col-md-10">
+  		  <div class="col-md-10">
   				<div class="page-header">
   					<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
   				</div>
@@ -37,40 +37,35 @@
   		<div class="col-md-1"></div>
   	</div>
 
-      <div class="row">
-    <div class="col-md-1">
-    </div>
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
 
-    <div class="col-md-10">
+          <div class="btn-group btn-group-justified">
+            <div class="btn-group">
+              <form role="form" action="/" method="get">
+                <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+              </form>
+            </div>
+          
 
-      <div class="btn-group btn-group-justified">
-        <div class="btn-group">
-          <form role="form" action="/" method="get">
-            <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
-          </form>
+            <div class="btn-group">
+              <form role="form" action="/logout/" method="get">
+                <!--<button type="text" class="btn btn-default" id="meni1" disabled>Odjava</button>-->
+                <button type="text" class="btn btn-default" id="meni1">Odjava</button>
+              </form>
+            </div>
+          </div>
+
+          <hr id="prijava">
+          <br>
+
         </div>
 
-        <div class="btn-group">
-          <form role="form" action="/logout/" method="get">
-            <!--<button type="text" class="btn btn-default" id="meni1" disabled>Odjava</button>-->
-            <button type="text" class="btn btn-default" id="meni1">Odjava</button>
-          </form>
-        </div>
-      </div>
-
-      <hr id="prijava">
-      <br>
-
+      <div class="col-md-1"></div>
     </div>
 
-    <div class="col-md-1">
-    </div>
-
-  </div>
-
-
-
-  <div class="row">
+    <div class="row">
       <div class="col-md-1"></div>
         <div class="col-md-10">
           <div>
@@ -80,206 +75,185 @@
       <div class="col-md-1"></div>
     </div>
 
+    <div class="row">
+      <div class="col-md-1"></div>
 
-<div class="row">
-
-    <div class="col-md-1">
-    </div>
-
-
-    <div class="col-md-10">
-
-
-      %for st,element in enumerate(Uporabnik):
-
-      <!--<form class="form-horizontal" role="form" action="/signin" method="post">-->
-      <form class="form-horizontal" role="form" action="." method="post">
-		%if st==0:
-        <div class="form-group">
-          <label for="ime1" class="col-sm-2 control-label">Ime</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[0]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+        <div class="col-md-10">
+          %for st,element in enumerate(Uporabnik):
+          <!--<form class="form-horizontal" role="form" action="/signin" method="post">-->
+            <form class="form-horizontal" role="form" action="." method="post">
+		
+            %if st==0:
+              <div class="form-group">
+                <label for="ime1" class="col-sm-2 control-label">Ime</label>
+              
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[0]}}</p>
+                </div>
+              
+                <div class="col-sm-1" id="spremeni">
+                  <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[1]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[1]}}</p>
+                </div>
+          
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[2]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[2]}}</p>
+                </div>
+          
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[3]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[3]}}</p>
+                </div>
+                
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[4]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[4]}}</p>
+                </div>
+                
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
+                </div>
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
+              <div class="form-group">
+                <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[5]}}</p>
+                </div>
+                
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-
-        <div class="form-group">
-          <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[5]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
-
-
-        <div class="form-group">
-          <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[6]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="obcinadelovanja" class="col-sm-2 control-label">Občina delovanja</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[6]}}</p>
+                </div>
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
 
-        <div class="form-group">
-          <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
-          <div class="col-sm-9">
-            <p class="form-control-static">{{element[7]}}</p>
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
-        </div>
+              <div class="form-group">
+                <label for="zanrglasbenika" class="col-sm-2 control-label">Žanr, ki ga igraš</label>
+                <div class="col-sm-9">
+                  <p class="form-control-static">{{element[7]}}</p>
+                </div>
+                
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
 
-        <div class="form-group">
-          <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
-          <div class="col-sm-9">
-            %if element[8] == None or element[8] == 'ne':
-              <p class="form-control-static">Ne</p>
-            %else:
-              <p class="form-control-static">Da</p>
+              <div class="form-group">
+                <label for="iscesskupino" class="col-sm-2 control-label">Ali iščeš skupino?</label>
+                <div class="col-sm-9">
+                  %if element[8] == None or element[8] == 'ne':
+                    <p class="form-control-static">Ne</p>
+                  %else:
+                    <p class="form-control-static">Da</p>
+                  %end
+                </div>
+                
+                <div class="col-sm-1" id="spremeni">
+                  <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+                </div>
+              </div>
             %end
-          </div>
-          <div class="col-sm-1" id="spremeni">
-            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
-          </div>
+              <br>
+            </form>
+          %end
         </div>
-        %end
-      %end
 
-
-
-
-          <br>
-
-        </form>
+      <div class="col-md-1"></div>
     </div>
-
-    <div class="col-md-1">
-    </div>
-
-
-  </div>
-
-  <div class="row">
-
-
-
-    <div class="col-md-1">
-    </div>
-
-    <div class="col-md-10">
-
-    <table class="table table-hover">
-      <tr>
-        <th class="col-sm-2">#</th>
-        <th class="col-md-3">Inštrument, ki ga igraš</th>
-        <th class="col-md-3">Stopnja znanja</th>
-        <th class="col-md-3">Leto začetka igranja</th>
-        <th class="col-md-1">&nbsp;</th>
-      </tr>
-
-      %for cifra, element in enumerate(TabelaInstrumentov):
-      <tr>
-        <td>{{cifra}}</td>
-        <td>{{element[0]}}</td>
-        <td>{{element[1]}}</td>
-        <td>{{element[2]}}</td>
-        <td>
-          <form method="post">
-             <p><input type="hidden" name="delete" value="{{id}}"/>
-             <input type="submit" value="Izbriši" name="submit"/></p>
-          </form>
-       </td>
-      </tr>
-      %end
-
-
-    </table>
-
-    </div>
-
-    <div class="col-md-1">
-    </div>
-
-  </div>
-
-
 
     <div class="row">
-    <div class="col-md-1"></div>
-      <div class="col-md-10">
-        <footer>
-          <hr>
-          <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+
+          <table class="table table-hover">
+            <tr>
+              <th class="col-sm-2">#</th>
+              <th class="col-md-3">Inštrument, ki ga igraš</th>
+              <th class="col-md-3">Stopnja znanja</th>
+              <th class="col-md-3">Leto začetka igranja</th>
+              <th class="col-md-1">&nbsp;</th>
+            </tr>
+
+            %for cifra, element in enumerate(TabelaInstrumentov):
+              <tr>
+                <td>{{cifra}}</td>
+                <td>{{element[0]}}</td>
+                <td>{{element[1]}}</td>
+                <td>{{element[2]}}</td>
+                <td>
+                  <form method="post">
+                     <p><input type="hidden" name="delete" value="{{id}}"/>
+                     <input type="submit" value="Izbriši" name="submit"/></p>
+                  </form>
+               </td>
+              </tr>
+            %end
+          </table>
+        </div>
+      <div class="col-md-1"></div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <footer>
+            <hr>
+            <p>&copy; PetraP & RokI & MatjazZ 2014</p>
           </footer>
-      </div>
-    <div class="col-md-1"></div>
+        </div>
+      <div class="col-md-1"></div>
     </div> <!-- /container -->
 
 
