@@ -105,10 +105,13 @@ def main():
     
     cur.execute("SELECT ime FROM zanr ORDER BY ime")
     CurIsce = cur.fetchall()
+
+    cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
+    CurIsce2 = cur.fetchall()
     
     tmp = bottle.template('main.html', uporabnik=uporabnik, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
-                   obcina2=CurObcina2, isce = CurIsce)
+                   obcina2=CurObcina2, isce = CurIsce, isce2 = CurIsce2)
     return tmp
 
 
@@ -151,7 +154,7 @@ def iskanje():
         if i != None:
             parametri.append(i)
     parametri = tuple(parametri)
-   
+
     cur.execute(select_stavek, (parametri))
     CurIskanjeGlasbenika = cur.fetchall()
     
@@ -160,13 +163,38 @@ def iskanje():
 
 @bottle.post('/iskanjeskupine')
 def iskanje():
-    obcina2 = bottle.request.forms.get('obcina2')
-    zanr2 = bottle.request.forms.get('zanr2')
+    obcina2 = bottle.request.forms.getunicode('obcina2')
+    zanr2 = bottle.request.forms.getunicode('zanr2')
     #isceclane = bottle.AutoServerrequest.forms.get('isceclane')
-    isceclane = bottle.request.forms.get('isceclane')
-    seznam = [('Skupina deluje v okolici občine: ', obcina2), ('Skupina igra žanr: ', zanr2),
-              ('Skupina isce clane: ', isceclane)]
-    return bottle.template('iskanjeskupine.html', seznam=seznam)
+    isce2 = bottle.request.forms.getunicode('isce2')
+
+    zadetki = (obcina2, zanr2, isce2)
+
+    select_stavek = """SELECT DISTINCT ime, datum_ustanovitve, spletna_stran, fb, obcina, igra_zanr, glasbilo, spol, stevilo FROM skupina
+        JOIN skupina_deluje_v_okolici ON skupina.ime = skupina_deluje_v_okolici.skupina
+        JOIN skupina_igra_zanr ON skupina.ime = skupina_igra_zanr.skupina
+        JOIN skupina_isce ON skupina.ime = skupina_isce.skupina
+        WHERE"""
+
+       
+    if zadetki[0] != None:
+        select_stavek = select_stavek+" obcina = %s AND"
+    if zadetki[1] != None:
+        select_stavek = select_stavek+" igra_zanr = %s AND"
+    if zadetki[2] != None:
+        select_stavek = select_stavek+" glasbilo = %s AND"    
+    select_stavek = select_stavek+" TRUE"
+
+    parametri = []
+    for i in zadetki:
+        if i != None:
+            parametri.append(i)
+    parametri = tuple(parametri)
+
+    cur.execute(select_stavek, (parametri))
+    CurIskanjeSkupine = cur.fetchall()
+    
+    return bottle.template('iskanjeskupine.html', IskanjeSkupine = CurIskanjeSkupine)
 
 
 @bottle.get('/login')
