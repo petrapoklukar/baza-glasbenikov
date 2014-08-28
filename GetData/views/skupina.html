@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>Glasbenik.pikasi</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+  	<div class="row">
+  		<div class="col-md-1"></div>
+  			<div class="col-md-10">
+  				<div class="page-header">
+  					<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+  				</div>
+  			</div>
+  		<div class="col-md-1"></div>
+  	</div>
+
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-10">
+
+        <div class="btn-group btn-group-justified">
+          <div class="btn-group">
+            <form role="form" action="/" method="get">
+              <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+            </form>
+          </div>
+
+          <div class="btn-group">
+            <form role="form" action="/logout/" method="get">
+              <!--<button type="text" class="btn btn-default" id="meni1" disabled>Odjava</button>-->
+              <button type="text" class="btn btn-default" id="meni1">Odjava</button>
+            </form>
+          </div>
+        </div>
+
+        <hr id="prijava">
+        <br>
+      </div>
+
+      <div class="col-md-1">
+      </div>
+    </div>
+
+  %if uporime1==uporime2:
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div>
+            <p>Dobrodošel na svojem profilu {{uporime2}}</p>
+          </div>
+        </div>
+      <div class="col-md-1"></div>
+    </div>
+
+  %else:
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div>
+            <p>Profil uporabnika {{uporime1}}</p>
+          </div>
+        </div>
+      <div class="col-md-1"></div>
+    </div>
+  %end
+
+  %for sporocilo in sporocila:
+  	<div class="alert {{sporocilo[0]}}">{{sporocilo[1]}}</div>
+  %end
+
+<form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">
+
+<div class="row">
+
+    <div class="col-md-1">
+    </div>
+
+
+    <div class="col-md-10">
+
+      %for st,element in enumerate(Uporabnik):
+
+      <!--<form class="form-horizontal" role="form" action="/signin" method="post">-->
+
+		%if st==0:
+
+        <div class="form-group">
+          <label for="ime1" class="col-sm-2 control-label">Ime</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[0]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <!--<form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">-->
+          <input type="text" name="ime_novo" class="form-control" placeholder="Spremeni ime">
+          <div class="col-sm-1" id="spremeni">
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+        <div class="form-group">
+          <label for="priimek1" class="col-sm-2 control-label" >Priimek</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[1]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <input type="text" name="priimek_nov" class="form-control" placeholder="Spremeni priimek">
+          <div class="col-sm-1" id="spremeni">
+            <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+        <div class="form-group">
+          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[2]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <input type="email" name="email_nov" class="form-control" placeholder="Spremeni elektronski naslov">
+          <div class="col-sm-1" id="spremeni">
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+        <div class="form-group">
+          <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[3]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <input type="text" name="lrojstva_nova" class="form-control" placeholder="Popravi letnico rojstva">
+          <div class="col-sm-1" id="spremeni">
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+        <div class="form-group">
+          <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[4]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <input type="text" name="uporime_novo" class="form-control" placeholder="Spremeni uporabniško ime">
+          <div class="col-sm-1" id="spremeni">
+            <button type="button" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+		%if uporime1==uporime2:
+        <div class="form-group">
+          <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
+          </div>
+
+          <input type="text" name="geslo_novo1" class="form-control" placeholder="Novo geslo">
+          <div>
+          <input type="text" name="geslo_novo2" class="form-control" placeholder="Ponovno vtipkaj novo geslo">
+          <div class="col-sm-1" id="spremeni">
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+
+        </div>
+        %end
+
+
+
+        <div class="form-group">
+          <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+          <div class="col-sm-9">
+            <p class="form-control-static">{{element[5]}}</p>
+          </div>
+          %if uporime1==uporime2:
+          <select class="form-control" name='spol'>
+          		<option selected disabled>Spremeni spol</option>
+		  		%for ime in spol:
+		        	<option>{{ime[0]}}</option>
+		        %end
+          </select>
+          <div class="col-sm-1" id="spremeni">
+            <button type="sumbit" class="btn btn-primary btn-sm">Spremeni</button>
+          </div>
+          %end
+        </div>
+
+
+
+        %end
+
+      %end
+
+          <br>
+
+        </form>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+
+  </div>
+
+  <div class="row">
+
+
+  <h4>Tabela igranih glasbil</h4>
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+
+    <table class="table table-hover">
+      <tr>
+        <th class="col-sm-2">#</th>
+        <th class="col-md-3">Inštrument, ki ga igraš</th>
+        <th class="col-md-3">Stopnja znanja</th>
+        <th class="col-md-3">Leto začetka igranja</th>
+        <th class="col-md-1">&nbsp;</th>
+      </tr>
+
+      %for cifra, element in enumerate(TabelaInstrumentov):
+      <tr>
+        <td>{{cifra}}</td>
+        <td>{{element[0]}}</td>
+        <td>{{element[1]}}</td>
+        <td>{{element[2]}}</td>
+        %if uporime1==uporime2:
+        <td>
+          <!--<form method="post">-->
+          <form action="/uporabnik/{{uporime1}}" method="post">
+             <p><input type="hidden" name="delete" value="{{"1"+element[0]}}">
+             <input type="submit" value="Izbriši" name="submit"></p>
+          </form>
+       </td>
+       %end
+      </tr>
+      %end
+    </table>
+
+    </div>
+
+    <div class="col-md-1">
+    </div>
+
+
+  %if uporime1==uporime2:
+  	<h4>Dodaj glasbilo</h4>
+
+  		<div class="form-group">
+			<label for="instrument" class="col-sm-2 control-label">glasbilo, ki ga igraš</label>
+		    	<div class="col-sm-10">
+		        	<select class="form-control" id='instrument' name='instrument'>
+		            	<option selected disabled>Izberi glasbilo</option>
+		                	%for ime in glasbilo:
+		                 		<option>{{ime[0]}}</option>
+		                  	%end
+		            </select>
+		        </div>
+		</div>
+		<br>
+
+		<div class="form-group">
+			<label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
+	    		<div class="col-sm-10">
+	        		<select class="form-control" name='stopnja'>
+	        			<option selected disabled>Izberi stopnjo znanja</option>
+							%for ime in znanje:
+			    				<option>{{ime[0]}}</option>
+			    			%end
+            		</select>
+        		</div>
+        </div>
+        <br>
+
+        <div class="form-group">
+			<label for="letorojstva" class="col-sm-2 control-label">Leto začetka igranja</label>
+		    	<div class="col-sm-10">
+		       		<input type="text" class="form-control" name="leto" placeholder="Vnesi leto začetka igranja">
+		        </div>
+        </div>
+        <br>
+
+	<div class="col-sm-1" id="spremeni">
+		<button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+    </div>
+
+  %end
+  <br>
+
+
+
+  <h4>Tabela obcin delovanja</h4>
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-10">
+
+      <table class="table table-hover">
+        <tr>
+          <th class="col-sm-2">#</th>
+          <th class="col-md-3">Obcina</th>
+          <th class="col-md-1">&nbsp;</th>
+        </tr>
+
+        %for cifra, element in enumerate(ObcinaDelovanja):
+        <tr>
+          <td>{{cifra}}</td>
+          <td>{{element[0]}}</td>
+          %if uporime1==uporime2:
+
+          <td>
+            <!--<form method="post">-->
+            <form action="/uporabnik/{{uporime1}}" method="post">
+               <p><input type="hidden" name="delete" value="{{"2"+element[0]}}">
+               <input type="submit" value="Izbriši" name="submit"></p>
+            </form>
+          </td>
+          %end
+        </tr>
+        %end
+      </table>
+
+  </div>
+
+  <div class="col-md-1">
+  </div>
+
+  %if uporime1==uporime2:
+
+  	<h4>Dodaj občino</h4>
+
+  		<div class="form-group">
+			<label for="instrument" class="col-sm-2 control-label">tvoja občina delovanja</label>
+		    	<div class="col-sm-10">
+		        	<select class="form-control" id='obcina' name='obcina'>
+		            	<option selected disabled>Izberi občino</option>
+		                	%for ime in obcina:
+		                 		<option>{{ime[0]}}</option>
+		                  	%end
+		            </select>
+		        </div>
+		</div>
+
+	<div class="col-sm-1" id="spremeni">
+		<button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+    </div>
+  %end
+
+
+  <h4>Tabela igranih žanrov</h4>
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-10">
+
+      <table class="table table-hover">
+        <tr>
+          <th class="col-sm-2">#</th>
+          <th class="col-md-3">Igran žanr</th>
+          <th class="col-md-1">&nbsp;</th>
+        </tr>
+
+        %for cifra, element in enumerate(IgranZanr):
+        <tr>
+          <td>{{cifra}}</td>
+          <td>{{element[0]}}</td>
+          %if uporime1==uporime2:
+          <td>
+            <!--<form method="post">-->
+            <form action="/uporabnik/{{uporime1}}" method="post">
+               <p><input type="hidden" name="delete" value="{{"3"+element[0]}}">
+               <input type="submit" value="Izbriši" name="submit"></p>
+            </form>
+          </td>
+          %end
+        </tr>
+        %end
+      </table>
+
+
+  </div>
+
+  <div class="col-md-1">
+  </div>
+
+  %if uporime1==uporime2:
+
+  	<h4>Dodaj igran žanr</h4>
+
+  		<div class="form-group">
+			<label for="instrument" class="col-sm-2 control-label">tvoji igrani žanri</label>
+		    	<div class="col-sm-10">
+		        	<select class="form-control" id='IgranZanr' name='IgranZanr'>
+		            	<option selected disabled>Izberi žanr</option>
+		                	%for ime in zanr1:
+		                 		<option>{{ime[0]}}</option>
+		                  	%end
+		            </select>
+		        </div>
+		</div>
+
+	<div class="col-sm-1" id="spremeni">
+		<button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+    </div>
+  %end
+
+
+
+
+  <h4>Tabela iskanih žanrov</h4>
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-10">
+
+      <table class="table table-hover">
+        <tr>
+          <th class="col-sm-2">#</th>
+          <th class="col-md-3">Iskan žanr</th>
+          <th class="col-md-1">&nbsp;</th>
+        </tr>
+
+        %for cifra, element in enumerate(IskanZanr):
+        <tr>
+          <td>{{cifra}}</td>
+          <td>{{element[0]}}</td>
+          %if uporime1==uporime2:
+
+          <td>
+            <!--<form method="post">-->
+            <form action="/uporabnik/{{uporime1}}" method="post">
+               <p><input type="hidden" name="delete" value="{{"4"+element[0]}}">
+               <input type="submit" value="Izbriši" name="submit"></p>
+            </form>
+          </td>
+          %end
+        </tr>
+        %end
+      </table>
+
+  </div>
+
+  <div class="col-md-1">
+  </div>
+
+  %if uporime1==uporime2:
+
+  	<h4>Dodaj iskan žanr</h4>
+
+  		<div class="form-group">
+			<label for="instrument" class="col-sm-2 control-label">tvoji iskani žanri</label>
+		    	<div class="col-sm-10">
+		        	<select class="form-control" id='IskanZanr' name='IskanZanr'>
+		            	<option selected disabled>Izberi žanr</option>
+		                	%for ime in zanr2:
+		                 		<option>{{ime[0]}}</option>
+		                  	%end
+		            </select>
+		        </div>
+		</div>
+
+	<div class="col-sm-1" id="spremeni">
+		<button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+    </div>
+  %end
+
+
+  </div>
+
+    <div class="row">
+    <div class="col-md-1"></div>
+      <div class="col-md-10">
+        <footer>
+          <hr>
+          <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+          </footer>
+      </div>
+    <div class="col-md-1"></div>
+    </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

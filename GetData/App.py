@@ -514,6 +514,7 @@ def signin():
     uporime = bottle.request.forms.getunicode('username1')
     geslo1 = bottle.request.forms.getunicode('geslo1')
     geslo2 = bottle.request.forms.getunicode('geslo2')
+    letozacetka = bottle.request.forms.getunicode('letozacetka')
 
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     glasbilo = cur.fetchall()
@@ -554,15 +555,12 @@ def signin():
         
         cur.execute("""INSERT INTO glasbenik (uporabnisko_ime, ime, priimek, spol, e_mail, leto_rojstva, geslo)
                                 VALUES (%s, %s, %s, %s, %s, %s, %s)""",(uporime, ime1, priimek1, spol, mail1, letorojstva, password_md5(geslo1)))
-        CurRegistracija2 = cur.fetchall()
 
         cur.execute("""INSERT INTO igra_poje (glasbenik, glasbilo, stopnja_znanja, leto_zacetka)
-                                VALUES (%s, %s, %s, %s)""", (uporime, instrument, stopnja, None))
-        CurRegistracija3 = cur.fetchall()
+                                VALUES (%s, %s, %s, %s)""", (uporime, instrument, stopnja, letozacetka))
 
         cur.execute("""INSERT INTO glasbenik_igra_zanr (glasbenik, igra_zanr)
                                 VALUES (%s, %s)""", (uporime, zanr))
-        CurRegistracija4 = cur.fetchall()
 
         # kaj je z žanrom pri iskanju skupine?
         #CurRegistracija.execute("""INSERT INTO glasbenik_isce_skupino (glasbenik, zanr)
@@ -570,11 +568,10 @@ def signin():
 
         cur.execute("""INSERT INTO glasbenik_deluje_v_okolici (glasbenik, obcina)
                                 VALUES (%s, %s)""", (uporime, obcina))
-        CurRegistracija5 = cur.fetchall()
         
         # Daj uporabniku cookie
         bottle.response.set_cookie('username', uporime, path='/', secret=secret)
-        bottle.redirect("/uporabnik") #to je uporabil bauer-redirect
+        bottle.redirect("/"+uporime) #to je uporabil bauer-redirect
     
     #return bottle.template('uporabnik.html', uporime=uporime, TabelaInstrumentov=CurTabelaInstrumentov, Uporabnik=Uporabnik)
 
