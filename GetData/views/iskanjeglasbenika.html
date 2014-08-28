@@ -27,7 +27,6 @@
   </head>
 
   <body>
-
   	<div class="row">
   		<div class="col-md-1"></div>
   			<div class="col-md-10">
@@ -39,36 +38,38 @@
   	</div>
 
     <div class="row">
-      <div class="col-md-1"></div>
-        
-        <div class="col-md-10">
+      <div class="col-md-1">
+      </div>
 
-          <div class="btn-group btn-group-justified">
-            
-            <div class="btn-group">
-              <form role="form" action="/" method="get">
-                <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
-              </form>
-            </div>
+      <div class="col-md-10">
 
-            <div class="btn-group">
-              <form role="form" action="/login" method="get">
-                <button type="submit" class="btn btn-default" id="meni1" href="/uporabnik" >Log in</button>
-              </form>
-            </div>
-
-            <div class="btn-group">
-              <form role="form" action="/noviuporabnik" method="post">
-                <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
-              </form>
-            </div>
+        <div class="btn-group btn-group-justified">
+          <div class="btn-group">
+            <form role="form" action="/" method="get">
+              <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+            </form>
           </div>
 
-          <hr id="prijava">
-          <br>
+          <div class="btn-group">
+            <form role="form" action="/login" method="get">
+              <button type="submit" class="btn btn-default" id="meni1" href="/uporabnik" >Log in</button>
+            </form>
+          </div>
+
+          <div class="btn-group">
+            <form role="form" action="/noviuporabnik" method="post">
+              <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
+            </form>
+          </div>
         </div>
 
-      <div class="col-md-1"></div>
+        <hr id="prijava">
+        <br>
+
+      </div>
+
+      <div class="col-md-1">
+      </div>
     </div>
 
     <div class="row">
@@ -110,7 +111,7 @@
                       <td>{{element[9]}}</td>
                       <td>
                         <p>
-                          <form role="form" action="/uporabnik/{{element[0]}}" method="get">
+                          <form role="form" action="/{{element[0]}}" method="get">
                             <button type="submit" class="btn btn-info">Ogled profila</button>
                           </form>
                         </p>
@@ -134,6 +135,7 @@
         </div>
       <div class="col-md-1"></div>
     </div> <!-- /container -->
+
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

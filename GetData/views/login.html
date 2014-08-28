@@ -12,9 +12,11 @@
 
     <!-- Bootstrap core CSS -->
     <link href="bootstrap.css" rel="stylesheet">
+    <!--<link href="/static/css/bootstrap.min.css" rel="stylesheet">-->
 
     <!-- Custom styles for this template -->
     <link href="jumbotron.css" rel="stylesheet">
+	<!--<link href="/static/signin.css" rel="stylesheet">-->
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -31,85 +33,89 @@
     <div class="row">
       <div class="col-md-1"></div>
       	<div class="col-md-10">
-          <div class="page-header">
-            <h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+          	<div class="page-header">
+              	<h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+              </div>
           </div>
-        </div>
       <div class="col-md-1"></div>
     </div>
 
     <div class="row">
-      <div class="col-md-1"></div>
+      <div class="col-md-1">
+      </div>
 
-        <div class="col-md-10">
+      <div class="col-md-10">
 
-         <div class="btn-group btn-group-justified">
-            <div class="btn-group">
-              <form role="form" action="/" method="get">
-                <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
-              </form>
-            </div>
-
-            <div class="btn-group">
-              <form role="form" action="/noviuporabnik" method="post">
-                <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
-              </form>
-            </div>
-          </div>
-
-          <hr id="prijava">
-          <br>
-
-        </div>
-
-      <div class="col-md-1"></div>
-    </div>
-
-    <div class="row">
-
-      <div class="col-md-1"></div>
-
-        <div class="col-md-3"></div>
-
-          <div class="col-md-4">
-		        <!--
-            <form class="form-signin" role="form" action="/uporabnik" method="post">
-            -->
-            <form class="form-signin" role="form" action="/login" method="post">
-              <h3 class="form-signin-heading">Log in</h3>
-                %if napaka:
-                  <div class="alert alert-warning">{{napaka}}</div>
-                %end
-              <input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime"
-              		%if uporime:
-             		value="{{uporime}}"
-              		%end
-              		name="uporime"
-              		required autofocus>
-              <input type="password" name="geslo" class="form-control" placeholder="Geslo" required>
-              <label class="checkbox">
-                <input type="checkbox" value="remember-me"> Remember me
-              </label>
-              <button class="btn btn-primary btn-block" type="submit">Log in</button>
+        <div class="btn-group btn-group-justified">
+          <div class="btn-group">
+            <form role="form" action="/" method="get">
+              <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
             </form>
           </div>
 
-        <div class="col-md-3"></div>
+          <div class="btn-group">
+            <form role="form" action="/noviuporabnik" method="post">
+              <button type="submit" class="btn btn-default" id="meni1" >Sign in</button>
+            </form>
+          </div>
+        </div>
 
-      <div class="col-md-1"></div>
+        <hr id="prijava">
+        <br>
+      </div>
+
+      <div class="col-md-1">
+      </div>
     </div>
 
     <div class="row">
+      <div class="col-md-1">
+      </div>
 
-      <div class="col-md-1"></div>
-        <div class="col-md-10">
-          <footer>
-            <hr>
-            <p>&copy; PetraP & RokI & MatjazZ 2014</p>
-          </footer>
-        </div>
+      <div class="col-md-3">
+      </div>
 
-      <div class="col-md-1"></div>
+      <div class="col-md-4">
+        <form class="form-signin" role="form" action="/login" method="post">
+          <h3 class="form-signin-heading">Log in</h3>
+          %if napaka:
+            <div class="alert alert-warning">{{napaka}}</div>
+          %end
+          
+          <input type="text" name="uporime" class="form-control" placeholder="Uporabniško ime"
+          		%if uporime:
+         		value="{{uporime}}"
+          		%end
+          		name="uporime"
+          		required autofocus>
+          <input type="password" name="geslo" class="form-control" placeholder="Geslo" required>
+          <label class="checkbox">
+            <input type="checkbox" value="remember-me"> Remember me
+          </label>
+          <button class="btn btn-primary btn-block" type="submit">Log in</button>
+        </form>
+      </div>
+
+      <div class="col-md-3">
+      </div>
+
+      <div class="col-md-1">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-1">
+      </div>
+
+      <div class="col-md-10">
+        <footer>
+          <hr>
+          <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+        </footer>
+      </div>
+
+      <div class="col-md-1">
+      </div>
     </div> <!-- /container -->
 
 	<!-- Bootstrap core JavaScript

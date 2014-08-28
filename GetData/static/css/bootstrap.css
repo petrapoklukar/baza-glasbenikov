@@ -5815,6 +5815,10 @@ button.close {
   right: 10px;
 }
 
+#obroba{
+  border: 1px solid #a1a1a1;
+}
+
 select option { color: black; }
 select.empty { color: #999; } 
 select option[disabled]:first-child { display: none; } 
