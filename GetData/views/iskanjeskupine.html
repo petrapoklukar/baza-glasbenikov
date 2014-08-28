@@ -75,14 +75,48 @@
       <div class="col-md-1"></div>
         <div class="col-md-10">
           <div>
-            <p>Tukaj se bodo v prihodnosti izpisali rezultati iskanja. Zaenkrat pa samo preverjam ali deluje :) </p>
-            <p>Iskal si skupine, za katere velja:
-              <ul>
-                %for stavek, element in seznam:
-                  <li>{{stavek}}{{element}}</li>
-                %end
-              </ul>
-            </p>
+              %if len(IskanjeSkupine) == 0:
+                <p>Ni zadetkov.</p>
+              %else:
+              <p>Rezultati iskanja:
+                  <table class="table table-hover">
+                    <tr>
+                      <th class="col-sm-1">#</th>
+                      <th class="col-sm-1">Ime</th>
+                      <th class="col-sm-1">Datum ustanovitve</th>
+                      <th class="col-sm-1">Spletna stran</th>
+                      <th class="col-sm-1">Facebook</th>
+                      <th class="col-md-1">Obcina</th>
+                      <th class="col-sm-1">Igra žanr</th>
+                      <th class="col-md-1">Išče glasbenika, ki igra</th>
+                      <th class="col-md-1">Išče glasbenika, ki je spola</th>
+                      <th class="col-md-1">Število glasbenikov, ki jih išče</th> 
+                      <th class="col-md-1">&nbsp;</th>
+                    </tr>
+
+                    %for cifra, element in enumerate(IskanjeSkupine):
+                    <tr>
+                      <td>{{cifra + 1}}</td>
+                      <td>{{element[0]}}</td>
+                      <td>{{element[1]}}</td>
+                      <td>{{element[2]}}</td>
+                      <td>{{element[3]}}</td>
+                      <td>{{element[4]}}</td>
+                      <td>{{element[5]}}</td>
+                      <td>{{element[6]}}</td>
+                      <td>{{element[7]}}</td>
+                      <td>{{element[8]}}</td>
+                      <td>
+                        <p>
+                          <form role="form" action="/uporabnik/{{element[0]}}" method="get">
+                            <button type="submit" class="btn btn-info">Ogled profila</button>
+                          </form>
+                        </p>
+                      </td>
+                    </tr>
+                    %end
+                  </table>
+              %end
           </div>
         </div>
       <div class="col-md-1"></div>

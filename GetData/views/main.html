@@ -166,11 +166,16 @@
 							</select>
 						</div> 
 						
-						<div>
-							<b>Ali skupine išče člane? </b>
-								<input type="radio" name="isceclane" value="ne"> Ne
-								<input type="radio" name="isceclane" value="da"> Da
-						</div>
+						<div class="form-group">
+							<label for="zanrskupine">Skupina išče glasbenika, ki igra glasbilo</label>
+							<select class="form-control" name='isce2'>
+								  <option selected disabled>Izberi glasbilo</option>
+									%for ime in isce2:
+										<option>{{ime[0]}}</option>
+									%end
+							</select>
+						</div> 
+						
 						<br>
 						<button type="submit" class="btn btn-primary">Išči</button>
 					</form>
