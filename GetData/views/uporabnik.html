@@ -92,7 +92,13 @@
   %end
 
   %for sporocilo in sporocila:
-  	<div class="alert {{sporocilo[0]}}">{{sporocilo[1]}}</div>
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="alert {{sporocilo[0]}}">{{sporocilo[1]}}</div>
+        </div>
+      <div class="col-md-1"></div>
+    </div>
   %end
 
     <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
@@ -123,7 +129,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -147,7 +153,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -170,7 +176,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -193,7 +199,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -216,7 +222,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -246,7 +252,7 @@
                   </div>
 
                   <div class="col-sm-1">
-                    <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>     
                 </div>
               %end
@@ -273,7 +279,7 @@
                   </div>
                 
                   <div class="col-sm-1">
-                    <button type="submit" class="btn btn-primary btn-sm">Spremeni</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>            
                 </div> 
                 %end

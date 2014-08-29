@@ -301,15 +301,19 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
     # podatki o iskanih zanrih
     cur.execute("SELECT zanr FROM glasbenik_isce_skupino WHERE glasbenik = %s ", (uporime_stran,))
     CurZanr2 = cur.fetchall()
+    print(uporime_stran)
     
     # osebni podatki
-    cur.execute("""SELECT DISTINCT ime, priimek, e_mail, leto_rojstva, uporabnisko_ime, spol, obcina, igra_zanr, zanr FROM glasbenik
-        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
-        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
-        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
-        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
-        WHERE uporabnisko_ime = %s""", (uporime_stran,))
+##    cur.execute("""SELECT DISTINCT ime, priimek, e_mail, leto_rojstva, uporabnisko_ime, spol, obcina, igra_zanr, zanr FROM glasbenik
+##        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
+##        JOIN glasbenik_deluje_v_okolici ON glasbenik_deluje_v_okolici.glasbenik = glasbenik.uporabnisko_ime
+##        JOIN glasbenik_igra_zanr ON glasbenik_igra_zanr.glasbenik = glasbenik.uporabnisko_ime
+##        LEFT JOIN glasbenik_isce_skupino ON glasbenik_isce_skupino.glasbenik = glasbenik.uporabnisko_ime
+##        WHERE uporabnisko_ime = %s""", (uporime_stran,))
+    cur.execute("""SELECT DISTINCT ime, priimek, e_mail, leto_rojstva, uporabnisko_ime, spol FROM glasbenik
+    WHERE uporabnisko_ime = %s""", (uporime_stran,))
     CurUporabnik = cur.fetchall()
+
     
     #return print(type(CurUporabnik.fetchall()))
     return bottle.template('uporabnik.html',
@@ -354,32 +358,24 @@ def uporabnik_change(uporime_stran):
             glasbilo=element_izbris[1:]
 
             cur.execute('DELETE FROM igra_poje WHERE glasbenik = %s AND glasbilo = %s', (uporime_login, glasbilo))
-            CurSpremembaPodatkov = cur.fetchall()
-            
             sporocila.append(("alert-success", "Izbrisali ste glasbilo."))
             
         elif element_izbris[0]=='2':
             obcina=element_izbris[1:]
 
             cur.execute('DELETE FROM glasbenik_deluje_v_okolici WHERE glasbenik = %s AND obcina = %s', (uporime_login, obcina))
-            CurSpremembaPodatkov = cur.fetchall()
-            
             sporocila.append(("alert-success", "Izbrisali ste obcino."))
             
         elif element_izbris[0]=='3':
             IgraZanr=element_izbris[1:]
             
             cur.execute('DELETE FROM glasbenik_igra_zanr WHERE glasbenik = %s AND igra_zanr = %s', (uporime_login, IgraZanr))
-            CurSpremembaPodatkov = cur.fetchall()
-            
             sporocila.append(("alert-success", "Izbrisali ste igran zanr."))
             
         elif element_izbris[0]=='4':
             IsceZanr=element_izbris[1:]
 
-            cur.execute('DELETE FROM glasbenik_isce_skupino WHERE glasbenik = %s AND zanr = %s', (uporime_login, IsceZanr))
-            CurSpremembaPodatkov = cur.fetchall()
-            
+            cur.execute('DELETE FROM glasbenik_isce_skupino WHERE glasbenik = %s AND zanr = %s', (uporime_login, IsceZanr))            
             sporocila.append(("alert-success", "Izbrisali ste iskan zanr."))
         
         return uporabnikova_stran(uporime_stran, sporocila=sporocila)
