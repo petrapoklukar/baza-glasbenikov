@@ -172,7 +172,7 @@ def iskanje():
     select_stavek = """SELECT DISTINCT ime, datum_ustanovitve, spletna_stran, fb, obcina, igra_zanr, glasbilo, spol, stevilo FROM skupina
         JOIN skupina_deluje_v_okolici ON skupina.ime = skupina_deluje_v_okolici.skupina
         JOIN skupina_igra_zanr ON skupina.ime = skupina_igra_zanr.skupina
-        JOIN skupina_isce ON skupina.ime = skupina_isce.skupina
+        LEFT JOIN skupina_isce ON skupina.ime = skupina_isce.skupina
         WHERE"""
     
     if zadetki[0] != None:
@@ -182,7 +182,7 @@ def iskanje():
     if zadetki[2] != None:
         select_stavek = select_stavek+" glasbilo = %s AND"    
     select_stavek = select_stavek+" TRUE"
-
+    
     parametri = []
     for i in zadetki:
         if i != None:
@@ -191,6 +191,7 @@ def iskanje():
 
     cur.execute(select_stavek, (parametri))
     CurIskanjeSkupine = cur.fetchall()
+    print(CurIskanjeSkupine)
     
     return bottle.template('iskanjeskupine.html', IskanjeSkupine = CurIskanjeSkupine)
 
