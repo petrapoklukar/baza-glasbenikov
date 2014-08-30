@@ -65,7 +65,7 @@ def get_user(auto_login = True):
     # Preverimo, ali ta uporabnik obstaja
     if username is not None:
         #CurPrijavljen=conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute("SELECT uporabnisko_ime, ime, priimek FROM glasbenik WHERE uporabnisko_ime=%s",
+        cur.execute("SELECT uporabnisko_ime, ime, priimek, geslo FROM glasbenik WHERE uporabnisko_ime=%s",
                   (username,))
         r = cur.fetchone()
         if r is not None:
@@ -267,7 +267,8 @@ def noviuporabnik():
 @bottle.route('/<uporime_stran>')
 def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je informacija na čigavi spletni strani smo
     # Kdo je prijavljeni uporabnik? 
-    (uporime_login, ime_login, priimek_login) = get_user()
+    (uporime_login, ime_login, priimek_login, geslo_login) = get_user()
+    dolzina = len(password_md5(geslo_login)) - 10
 
     cur.execute("SELECT stopnja FROM stopnja_znanja") # dropdown meni 'izurjenosti' za tabelo instrumentov
     CurStopnja = cur.fetchall()
@@ -302,8 +303,7 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
     # podatki o iskanih zanrih
     cur.execute("SELECT zanr FROM glasbenik_isce_skupino WHERE glasbenik = %s ", (uporime_stran,))
     CurZanr2 = cur.fetchall()
-    print(uporime_stran)
-    
+
     # osebni podatki
 ##    cur.execute("""SELECT DISTINCT ime, priimek, e_mail, leto_rojstva, uporabnisko_ime, spol, obcina, igra_zanr, zanr FROM glasbenik
 ##        JOIN igra_poje ON igra_poje.glasbenik = glasbenik.uporabnisko_ime
@@ -325,6 +325,7 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
                            IgranZanr=CurZanr,
                            IskanZanr=CurZanr2,
                            Uporabnik=CurUporabnik,
+                           dolzina = dolzina,
                            sporocila=sporocila,
                            znanje=CurStopnja,
                            glasbilo=glasbilo,
@@ -341,7 +342,7 @@ def uporabnik_change(uporime_stran):
     """Obdelaj formo za spreminjanje podatkov o uporabniku."""
     
     # Kdo je prijavljen?
-    (uporime_login, ime_login, priimek_login) = get_user()
+    (uporime_login, ime_login, priimek_login, geslo_login) = get_user()
     
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
     sporocila = [] 
