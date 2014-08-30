@@ -344,7 +344,7 @@ def uporabnik_change(uporime_stran):
     
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
     sporocila = [] 
-
+    
     # Brisanje podatkov
     if 'delete' in bottle.request.POST.keys():
         #element_izbris = bottle.request.POST['delete'] # ne bere šumnikov
@@ -353,7 +353,7 @@ def uporabnik_change(uporime_stran):
 
         # število na začetku elementa izbrisa nam pove, kateri podatek želimo zbrisati. Pokaže nam pravo tabelo
         # Legenda: 1-igrana glasbila, 2-obcina delovanja, 3-igran zanr, 4-iskan zanr
-        print(element_izbris)
+        
         if element_izbris[0]=='1':
             glasbilo=element_izbris[1:]
 
@@ -381,18 +381,17 @@ def uporabnik_change(uporime_stran):
         return uporabnikova_stran(uporime_stran, sporocila=sporocila)
 
     # SPREMINJANJE OSEBNIH PODATKOV
+    
     # Novo ime
-    ime_new = bottle.request.forms.ime_novo#getunicode('ime_novo')
+    ime_new = bottle.request.forms.getunicode('ime_novo')
     # Nov priimek
     priimek_new = bottle.request.forms.getunicode('priimek_nov')
     # Nov email
     email_new = bottle.request.forms.getunicode('email_nov')
     # Popravljena letnica rojstva
     lrojstva_new = bottle.request.forms.getunicode('lrojstva_nova')
-    """
     # Novo uporabniško ime
     uporime_new = bottle.request.forms.getunicode('uporime_novo')
-    """
     # Novo geslo
     geslo_new1 = bottle.request.forms.getunicode('geslo_novo1')
     geslo_new2 = bottle.request.forms.getunicode('geslo_novo2')
@@ -405,88 +404,98 @@ def uporabnik_change(uporime_stran):
     
     # Preverimo staro geslo
     cur.execute ("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s",(uporime_login,))
-    CurSpremembaPodatkov = cur.fetchone()
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
+    if (ime_new or priimek_new or email_new or lrojstva_new or uporime_new or geslo_new1 or geslo_new2 or spol_new)!= None:
+        if cur.fetchone():
+            
+            # Geslo je ok
+            # Ali je treba spremeniti ime?
+            if ime_new != '':
+                cur.execute("UPDATE glasbenik SET ime=%s WHERE uporabnisko_ime=%s", (ime_new, uporime_login))
+                
+                sporocila.append(("alert-success", "Spremenili ste si ime."))
+            if priimek_new != '':
+                cur.execute("UPDATE glasbenik SET priimek=%s WHERE uporabnisko_ime=%s", (priimek_new, uporime_login))
+                
+                sporocila.append(("alert-success", "Spremenili ste si priimek."))
+            if email_new != '':
+                cur.execute("UPDATE glasbenik SET e_mail=%s WHERE uporabnisko_ime=%s", (email_new, uporime_login))
+                
+                sporocila.append(("alert-success", "Spremenili ste si email."))
+            if lrojstva_new != '':
+                cur.execute("UPDATE glasbenik SET leto_rojstva=%s WHERE uporabnisko_ime=%s", (lrojstva_new, uporime_login))
 
-    if CurSpremembaPodatkov:
-        # Geslo je ok
-        # Ali je treba spremeniti ime?
-        if ime_new != '':
-            cur.execute("UPDATE glasbenik SET ime=%s WHERE uporabnisko_ime=%s", (ime_new, uporime_login))
-            CurSpremembaPodatkov = cur.fetchall()
-            sporocila.append(("alert-success", "Spremenili ste si ime."))
-        if priimek_new != "":
-            cur.execute("UPDATE glasbenik SET priimek=%s WHERE uporabnisko_ime=%s", (priimek_new, uporime_login))
-            CurSpremembaPodatkov = cur.fetchall()
-            sporocila.append(("alert-success", "Spremenili ste si priimek."))
-        if email_new != "":
-            cur.execute("UPDATE glasbenik SET e_mail=%s WHERE uporabnisko_ime=%s", (email_new, uporime_login))
-            CurSpremembaPodatkov = cur.fetchall()
-            sporocila.append(("alert-success", "Spremenili ste si email."))
-        if lrojstva_new != '':
-            cur.execute("UPDATE glasbenik SET leto_rojstva=%s WHERE uporabnisko_ime=%s", (lrojstva_new, uporime_login))
-            CurSpremembaPodatkov = cur.fetchall()
-            sporocila.append(("alert-success", "Popravili ste si leto rojstva."))
-        if spol_new!= None:
-            cur.execute("UPDATE glasbenik SET spol=%s WHERE uporabnisko_ime=%s", (spol_new, uporime_login))
-            CurSpremembaPodatkov = cur.fetchall()
-            sporocila.append(("alert-success", "Spremenili ste si spol.")) 
-        # Ali je treba spremeniti geslo?
-        if geslo_new1 or geslo_new2:
-            # Preverimo, ali se gesli ujemata
-            if geslo_new1 == geslo_new2:
-                # Vstavimo v bazo novo geslo
-                geslo_new1 = password_md5(geslo_new1)
-                cur.execute ("UPDATE glasbenik SET geslo=%s WHERE uporabnisko_ime = %s", (geslo_new1, uporime_login))
-                CurSpremembaPodatkov = cur.fetchall()
-                sporocila.append(("alert-success", "Spremenili ste geslo."))
-            else:
-                sporocila.append(("alert-danger", "Gesli se ne ujemata"))
+                sporocila.append(("alert-success", "Spremenili ste leto rojstva."))
+
+            if uporime_new!= '':
+                cur.execute("UPDATE glasbenik SET uporabnisko_ime=%s WHERE uporabnisko_ime=%s" , (uporime_new, uporime_login))
+                
+                sporocila.append(("alert-success", "Spremenili ste uporabniško ime."))
+                ## TUKAJ TE PREUSMERI NA GLAVNI PAGE
+
+            if spol_new!= None:
+                cur.execute("UPDATE glasbenik SET spol=%s WHERE uporabnisko_ime=%s", (spol_new, uporime_login))
+                
+                sporocila.append(("alert-success", "Spremenili ste si spol.")) 
+            # Ali je treba spremeniti geslo?
+
+            if geslo_new1 or geslo_new2:
+                # Preverimo, ali se gesli ujemata
+                if geslo_new1 == geslo_new2:
+                    # Vstavimo v bazo novo geslo
+                    geslo_new1 = password_md5(geslo_new1)
+                    cur.execute ("UPDATE glasbenik SET geslo=%s WHERE uporabnisko_ime = %s", (geslo_new1, uporime_login))
+                    
+                    sporocila.append(("alert-success", "Spremenili ste geslo."))
+                else:
+                    sporocila.append(("alert-danger", "Gesli se ne ujemata"))
+        else:
+            # Geslo ni ok
+            sporocila.append(("alert-danger", "Ne obstajate v bazi"))
     else:
-        # Geslo ni ok
-        sporocila.append(("alert-danger", "Ne obstajate v bazi"))
 
 
-    #VSTAVLJANJE PODATKOV O DEJAVNOSTI
-    
-    # TABELA INSTRUMENTOV
-    glasbilo = bottle.request.forms.getunicode('instrument')
-    st_znanja = bottle.request.forms.getunicode('stopnja')
-    leto_zac = bottle.request.forms.getunicode('leto')
-    
-    if glasbilo != None and st_znanja != None and leto_zac!= '':
-        cur.execute("INSERT INTO igra_poje(glasbenik, glasbilo, stopnja_znanja, leto_zacetka) VALUES (%s,%s,%s,%s)",
-                                    (uporime_login, glasbilo, st_znanja, leto_zac))
-        CurSpremembaPodatkov = cur.fetchall()
-        sporocila.append(("alert-success", "Dodali ste glasbilo."))
-       
-    # TABELA OBCIN
-    obcina = bottle.request.forms.getunicode('obcina')
-    
-    if obcina!=None:
-        cur.execute("INSERT INTO glasbenik_deluje_v_okolici(glasbenik, obcina) VALUES (%s,%s)",
-                                    (uporime_login, obcina))
-        CurSpremembaPodatkov = cur.fetchall()
-        sporocila.append(("alert-success", "Dodali ste obcino."))
+        #VSTAVLJANJE PODATKOV O DEJAVNOSTI
+        
+        # TABELA INSTRUMENTOV
+        glasbilo = bottle.request.forms.getunicode('instrument')
+        st_znanja = bottle.request.forms.getunicode('stopnja')
+        leto_zac = bottle.request.forms.getunicode('leto')
+        
+        
+        if glasbilo != None and st_znanja != None and leto_zac!= '':
+            cur.execute("INSERT INTO igra_poje(glasbenik, glasbilo, stopnja_znanja, leto_zacetka) VALUES (%s,%s,%s,%s)",
+                                        (uporime_login, glasbilo, st_znanja, leto_zac))
+            
+            sporocila.append(("alert-success", "Dodali ste glasbilo."))
+           
+        # TABELA OBCIN
+        obcina = bottle.request.forms.getunicode('obcina')
+        
+        if obcina!=None:
+            cur.execute("INSERT INTO glasbenik_deluje_v_okolici(glasbenik, obcina) VALUES (%s,%s)",
+                                        (uporime_login, obcina))
+            
+            sporocila.append(("alert-success", "Dodali ste obcino."))
 
-    # TABELA IGRANIH ZANROV
-    IgraZanr = bottle.request.forms.getunicode('IgranZanr')
+        # TABELA IGRANIH ZANROV
+        IgraZanr = bottle.request.forms.getunicode('IgranZanr')
 
-    if IgraZanr!=None:
-        cur.execute("INSERT INTO glasbenik_igra_zanr(glasbenik, igra_zanr) VALUES (%s,%s)",
-                                    (uporime_login, IgraZanr))
-        CurSpremembaPodatkov = cur.fetchall()
-        sporocila.append(("alert-success", "Dodali ste igran žanr."))
+        if IgraZanr!=None:
+            cur.execute("INSERT INTO glasbenik_igra_zanr(glasbenik, igra_zanr) VALUES (%s,%s)",
+                                        (uporime_login, IgraZanr))
+            
+            sporocila.append(("alert-success", "Dodali ste igran žanr."))
 
-    # TABELA ISKANIH ZANROV
-    IsceZanr = bottle.request.forms.getunicode('IskanZanr')
-
-    if IsceZanr!=None:
-        cur.execute("INSERT INTO glasbenik_isce_skupino(glasbenik, zanr) VALUES (%s,%s)",
-                                    (uporime_login, IsceZanr))
-        CurSpremembaPodatkov = cur.fetchall()
-        sporocila.append(("alert-success", "Dodali ste iskan žanr.")) 
-    
+        # TABELA ISKANIH ZANROV
+        IskanZanr = bottle.request.forms.getunicode('IskanZanr')
+        
+        if IskanZanr!=None:
+            cur.execute("INSERT INTO glasbenik_isce_skupino(glasbenik, zanr) VALUES (%s,%s)",
+                                        (uporime_login, IskanZanr))
+            
+            sporocila.append(("alert-success", "Dodali ste iskan žanr.")) 
+        
 
     # Prikažemo stran z uporabnikom, z danimi sporočili. Kot vidimo,
     # lahko kar pokličemo funkcijo, ki servira tako stran

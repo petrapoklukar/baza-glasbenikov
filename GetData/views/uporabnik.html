@@ -101,199 +101,200 @@
     </div>
   %end
 
-    <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
 
       <div class="row">
 
         <div class="col-md-1"></div>
         
         <div class="col-md-10" id="obroba">
+          <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
 
-          %for st,element in enumerate(Uporabnik):
-            <br>
-		        %if st==0:
-              <div class="form-group">
-                <label for="ime1" class="col-sm-2 control-label">Ime</label>
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[0]}}</p>
-                </div>
-                <br>
-              </div>
-
-                %if uporime1==uporime2:
+            %for st,element in enumerate(Uporabnik):
+              <br>
+  		        %if st==0:
                 <div class="form-group">
-                  <div class="col-sm-2"></div>
-
+                  <label for="ime1" class="col-sm-2 control-label">Ime</label>
                   <div class="col-sm-9">
-                     <input type="text" name="ime_novo" class="form-control" placeholder="Spremeni ime">
-                  </div>
-
-                  <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    <p class="form-control-static">{{element[0]}}</p>
                   </div>
                   <br>
                 </div>
-                %end
 
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
 
-              <div class="form-group">
-                <label for="priimek1" class="col-sm-2 control-label">Priimek</label>
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[1]}}</p>
-                </div>
-                <br>
-              </div>
+                    <div class="col-sm-9">
+                       <input type="text" name="ime_novo" class="form-control" placeholder="Spremeni ime">
+                    </div>
 
-                %if uporime1==uporime2:
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
-
-                  <div class="col-sm-9">
-                     <input type="text" name="priimek_nov" class="form-control" placeholder="Spremeni priimek">
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>
+                    <br>
                   </div>
+                  %end
 
-                  <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+
+                <div class="form-group">
+                  <label for="priimek1" class="col-sm-2 control-label">Priimek</label>
+                  <div class="col-sm-9">
+                    <p class="form-control-static">{{element[1]}}</p>
                   </div>
                   <br>
                 </div>
-                %end
-              
-              <div class="form-group">
-                <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[2]}}</p>
-                </div>
-                <br>
-              </div>
 
-                %if uporime1==uporime2:
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
 
-                  <div class="col-sm-9">
-                     <input type="text" name="email_nov" class="form-control" placeholder="Spremeni elektronski naslov">
+                    <div class="col-sm-9">
+                       <input type="text" name="priimek_nov" class="form-control" placeholder="Spremeni priimek">
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>
+                    <br>
                   </div>
-
-                  <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                  %end
+                
+                <div class="form-group">
+                  <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+                  <div class="col-sm-9">
+                    <p class="form-control-static">{{element[2]}}</p>
                   </div>
                   <br>
                 </div>
-                %end
 
-              <div class="form-group">
-                <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[3]}}</p>
-                </div>
-                <br>
-              </div>
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
 
-                %if uporime1==uporime2:
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
+                    <div class="col-sm-9">
+                       <input type="text" name="email_nov" class="form-control" placeholder="Spremeni elektronski naslov">
+                    </div>
 
-                  <div class="col-sm-9">
-                     <input type="text" name="lrojstva_nova" class="form-control" placeholder="Spremeni letnico rojstva">
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>
+                    <br>
                   </div>
+                  %end
 
-                  <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                <div class="form-group">
+                  <label for="letorojstva" class="col-sm-2 control-label">Letnica rojstva</label>
+                  <div class="col-sm-9">
+                    <p class="form-control-static">{{element[3]}}</p>
                   </div>
                   <br>
                 </div>
-                %end
 
-              <div class="form-group">
-                <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[4]}}</p>
-                </div>
-                <br>
-              </div>
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
 
-                %if uporime1==uporime2:
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
+                    <div class="col-sm-9">
+                       <input type="text" name="lrojstva_nova" class="form-control" placeholder="Spremeni letnico rojstva">
+                    </div>
 
-                  <div class="col-sm-9">
-                     <input type="text" name="uporime_novo" class="form-control" placeholder="Spremeni uporabniško ime">
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>
+                    <br>
                   </div>
+                  %end
 
-                  <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                <div class="form-group">
+                  <label for="username1" class="col-sm-2 control-label">Uporabniško ime</label>
+                  <div class="col-sm-9">
+                    <p class="form-control-static">{{element[4]}}</p>
                   </div>
                   <br>
                 </div>
+
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
+
+                    <div class="col-sm-9">
+                       <input type="text" name="uporime_novo" class="form-control" placeholder="Spremeni uporabniško ime">
+                    </div>
+
+                    <div class="col-sm-1">
+                        <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>
+                    <br>
+                  </div>
+                  %end
+
+
+            		%if uporime1==uporime2:
+                  <div class="form-group">
+                    <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+                    <div class="col-sm-9">
+                      <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-9">
+                      <input type="text" name="geslo_novo1" class="form-control" placeholder="Novo geslo">
+                    </div>
+                    <div class="col-sm-1"></div>
+                  </div>
+
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-9">
+                      <input type="text" name="geslo_novo2" class="form-control" placeholder="Ponovno vtipkaj novo geslo">
+                    </div>
+
+                    <div class="col-sm-1">
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>     
+                  </div>
                 %end
 
-
-          		%if uporime1==uporime2:
                 <div class="form-group">
-                  <label for="geslo1" class="col-sm-2 control-label">Geslo</label>
+                  <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
+                  
                   <div class="col-sm-9">
-                    <p class="form-control-static">TUKAJ BO TVOJE GESLO</p>
+                    <p class="form-control-static">{{element[5]}}</p>
                   </div>
                 </div>
+                  
+                  %if uporime1==uporime2:
+                  <div class="form-group">
+                    <div class="col-sm-2"></div>
 
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-9">
-                    <input type="text" name="geslo_novo1" class="form-control" placeholder="Novo geslo">
-                  </div>
-                  <div class="col-sm-1"></div>
-                </div>
-
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
-                  <div class="col-sm-9">
-                    <input type="text" name="geslo_novo2" class="form-control" placeholder="Ponovno vtipkaj novo geslo">
-                  </div>
-
-                  <div class="col-sm-1">
-                    <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
-                  </div>     
-                </div>
+                    <div class="col-sm-9">
+                      <select class="form-control" name='spol_nov'>
+                      		<option selected disabled>Spremeni spol</option>
+            		  		  %for ime in spol:
+            		        	<option>{{ime[0]}}</option>
+            		        %end
+                      </select>
+                    </div>
+                  
+                    <div class="col-sm-1">
+                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    </div>            
+                  </div> 
+                  %end
+                
               %end
-
-              <div class="form-group">
-                <label for="spolglasbenika" class="col-sm-2 control-label">Spol</label>
-                
-                <div class="col-sm-9">
-                  <p class="form-control-static">{{element[5]}}</p>
-                </div>
-              </div>
-                
-                %if uporime1==uporime2:
-                <div class="form-group">
-                  <div class="col-sm-2"></div>
-
-                  <div class="col-sm-9">
-                    <select class="form-control" name='spol'>
-                    		<option selected disabled>Spremeni spol</option>
-          		  		  %for ime in spol:
-          		        	<option>{{ime[0]}}</option>
-          		        %end
-                    </select>
-                  </div>
-                
-                  <div class="col-sm-1">
-                    <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
-                  </div>            
-                </div> 
-                %end
-              
             %end
-          %end
-          <br>
+            <br>
+          </form>
         </div>
 
         <div class="col-md-1"></div>
       </div>
       <br> 
 
-      <div class="row">        
+      <div class="row">
         <div class="col-md-1"></div>
 
         <div class="col-md-10" id="obroba">
@@ -329,42 +330,44 @@
 
           %if uporime1==uporime2:
             <h5>Dodaj glasbilo</h5>
-            <div class="form-group">
+            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+              <div class="form-group">
 
-              <label for="instrument" class="col-sm-2 control-label">glasbilo, ki ga igraš</label>
-                <div class="col-sm-9">
-                  <select class="form-control" id='instrument' name='instrument'>
-                    <option selected disabled>Izberi glasbilo</option>
-                      %for ime in glasbilo:
-                        <option>{{ime[0]}}</option>
-                      %end
-                  </select>
-                </div>
-                <div class="col-sm-1"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
-                <div class="col-sm-9">
-                  <select class="form-control" name='stopnja'>
-                    <option selected disabled>Izberi stopnjo znanja</option>
-                      %for ime in znanje:
-                        <option>{{ime[0]}}</option>
-                      %end
-                  </select>
-                </div>
-                <div class="col-sm-1"></div>
-            </div>
-
-            <div class="form-group">
-              <label for="letorojstva" class="col-sm-2 control-label">Leto začetka igranja</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="leto" placeholder="Vnesi leto začetka igranja">
+                <label for="instrument" class="col-sm-2 control-label">glasbilo, ki ga igraš</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" id='instrument' name='instrument'>
+                      <option selected disabled>Izberi glasbilo</option>
+                        %for ime in glasbilo:
+                          <option>{{ime[0]}}</option>
+                        %end
+                    </select>
+                  </div>
+                  <div class="col-sm-1"></div>
               </div>
-              <div class="col-sm-1">
-                <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+
+              <div class="form-group">
+                <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
+                  <div class="col-sm-9">
+                    <select class="form-control" name='stopnja'>
+                      <option selected disabled>Izberi stopnjo znanja</option>
+                        %for ime in znanje:
+                          <option>{{ime[0]}}</option>
+                        %end
+                    </select>
+                  </div>
+                  <div class="col-sm-1"></div>
               </div>
-            </div>
+
+              <div class="form-group">
+                <label for="letorojstva" class="col-sm-2 control-label">Leto začetka igranja</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control" name="leto" placeholder="Vnesi leto začetka igranja">
+                </div>
+                <div class="col-sm-1">
+                  <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+                </div>
+              </div>
+            </form>
           %end
         </div>
 
@@ -406,26 +409,25 @@
             </tr>
             %end
           </table>
-          <br>
 
           %if uporime1==uporime2:
           <h5>Dodaj občino</h5>
-            <div class="form-group">
-              <label for="instrument" class="col-sm-2 control-label">tvoja občina delovanja</label>
-              <div class="col-sm-9">
-                <select class="form-control" id='obcina' name='obcina'>
-                  <option selected disabled>Izberi občino</option>
-                    %for ime in obcina:
-                      <option>{{ime[0]}}</option>
-                    %end
-                </select>
+            <form action="/{{uporime1}}" method="post">
+              <div class="form-group">
+                <label for="instrument" class="col-sm-2 control-label">tvoja občina delovanja</label>
+                <div class="col-sm-9">
+                  <select class="form-control" id='obcina' name='obcina'>
+                    <option selected disabled>Izberi občino</option>
+                      %for ime in obcina:
+                        <option>{{ime[0]}}</option>
+                      %end
+                  </select>
+                </div>
+                <div class="col-sm-1" id="spremeni">
+                  <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+                </div>
               </div>
-              <div class="col-sm-1" id="spremeni">
-                <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
-              </div>
-            </div>
-
-            
+            </form>
             %end
         </div>
 
@@ -468,24 +470,26 @@
               </tr>
             %end
           </table>
-          <br>
+          
 
           %if uporime1==uporime2:
             <h5>Dodaj igran žanr</h5>
-            <div class="form-group">
-              <label for="instrument" class="col-sm-2 control-label">tvoji igrani žanri</label>
-              <div class="col-sm-9">
-                <select class="form-control" id='IgranZanr' name='IgranZanr'>
-                  <option selected disabled>Izberi žanr</option>
-                    %for ime in zanr1:
-                      <option>{{ime[0]}}</option>
-                    %end
-                </select>
+            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+              <div class="form-group">
+                <label for="instrument" class="col-sm-2 control-label">tvoji igrani žanri</label>
+                <div class="col-sm-9">
+                  <select class="form-control" id='IgranZanr' name='IgranZanr'>
+                    <option selected disabled>Izberi žanr</option>
+                      %for ime in zanr1:
+                        <option>{{ime[0]}}</option>
+                      %end
+                  </select>
+                </div>
+                <div class="col-sm-1" id="spremeni">
+                  <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+                </div>
               </div>
-              <div class="col-sm-1" id="spremeni">
-                <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
-              </div>
-            </div>
+            </form>
           %end
         </div>
 
@@ -529,31 +533,32 @@
               </tr>
             %end
           </table>
-          <br>
+          
 
           %if uporime1==uporime2:
             <h5>Dodaj iskan žanr</h5>
-            <div class="form-group">
-              <label for="instrument" class="col-sm-2 control-label">tvoji iskani žanri</label>
-              <div class="col-sm-9">
-                <select class="form-control" id='IskanZanr' name='IskanZanr'>
-                  <option selected disabled>Izberi žanr</option>
-                    %for ime in zanr2:
-                      <option>{{ime[0]}}</option>
-                    %end
-                </select>
+            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+
+              <div class="form-group">
+                <label for="instrument" class="col-sm-2 control-label">tvoji iskani žanri</label>
+                <div class="col-sm-9">
+                  <select class="form-control" id='IskanZanr' name='IskanZanr'>
+                    <option selected disabled>Izberi žanr</option>
+                      %for ime in zanr2:
+                        <option>{{ime[0]}}</option>
+                      %end
+                  </select>
+                </div>
+                <div class="col-sm-1" id="spremeni">
+                  <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
+                </div>
               </div>
-              <div class="col-sm-1" id="spremeni">
-                <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
-              </div>
-            </div>
+            </form>
           %end
         </div>
 
         <div class="col-md-1"></div>
       </div>
-     
-    </form>
 
     <div class="row">
       <div class="col-md-1"></div>
