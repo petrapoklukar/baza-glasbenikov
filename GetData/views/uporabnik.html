@@ -191,14 +191,20 @@
                   <br>
                 </div>
 
+
                   %if uporime1==uporime2:
                   <div class="form-group">
                     <div class="col-sm-2"></div>
 
                     <div class="col-sm-9">
-                       <input type="text" name="lrojstva_nova" class="form-control" placeholder="Spremeni letnico rojstva">
+                      <select class="form-control" id='lrojstva_nova' name='lrojstva_nova'>
+                        <option id="disa" value="" selected disabled>Izberi novo letnico rojstva</option>
+                          %for leto in MoznaLeta:
+                            <option>{{leto}}</option>
+                          %end
+                      </select>
                     </div>
-
+                
                     <div class="col-sm-1">
                         <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                     </div>
@@ -347,8 +353,8 @@
 
                 <label for="instrument" class="col-sm-2 control-label">glasbilo, ki ga igraš</label>
                   <div class="col-sm-9">
-                    <select class="form-control" id='instrument' name='instrument'>
-                      <option selected disabled>Izberi glasbilo</option>
+                    <select class="form-control" id='instrument' name='instrument' required>
+                      <option selected disabled value="">Izberi glasbilo</option>
                         %for ime in glasbilo:
                           <option>{{ime[0]}}</option>
                         %end
@@ -360,8 +366,8 @@
               <div class="form-group">
                 <label for="stopnjaznanja" class="col-sm-2 control-label">Stopnja znanja</label>
                   <div class="col-sm-9">
-                    <select class="form-control" name='stopnja'>
-                      <option selected disabled>Izberi stopnjo znanja</option>
+                    <select class="form-control" name='stopnja' required>
+                      <option value="" selected disabled>Izberi stopnjo znanja</option>
                         %for ime in znanje:
                           <option>{{ime[0]}}</option>
                         %end
@@ -373,7 +379,12 @@
               <div class="form-group">
                 <label for="letorojstva" class="col-sm-2 control-label">Leto začetka igranja</label>
                 <div class="col-sm-9">
-                  <input type="text" class="form-control" name="leto" placeholder="Vnesi leto začetka igranja">
+                  <select class="form-control" id='leto' name='leto' required>
+                    <option id="disa" value="" selected disabled>Izberi leto začetka igranja</option>
+                      %for leto in MoznaLeta:
+                        <option>{{leto}}</option>
+                      %end
+                  </select>
                 </div>
                 <div class="col-sm-1">
                   <button type="submit" class="btn btn-primary btn-sm">Dodaj</button>
@@ -428,8 +439,8 @@
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoja občina delovanja</label>
                 <div class="col-sm-9">
-                  <select class="form-control" id='obcina' name='obcina'>
-                    <option selected disabled>Izberi občino</option>
+                  <select class="form-control" id='obcina' name='obcina' required>
+                    <option value="" selected disabled>Izberi občino</option>
                       %for ime in obcina:
                         <option>{{ime[0]}}</option>
                       %end
@@ -490,8 +501,8 @@
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoji igrani žanri</label>
                 <div class="col-sm-9">
-                  <select class="form-control" id='IgranZanr' name='IgranZanr'>
-                    <option selected disabled>Izberi žanr</option>
+                  <select class="form-control" id='IgranZanr' name='IgranZanr' required>
+                    <option value="" selected disabled>Izberi žanr</option>
                       %for ime in zanr1:
                         <option>{{ime[0]}}</option>
                       %end
@@ -554,8 +565,8 @@
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoji iskani žanri</label>
                 <div class="col-sm-9">
-                  <select class="form-control" id='IskanZanr' name='IskanZanr'>
-                    <option selected disabled>Izberi žanr</option>
+                  <select class="form-control" id='IskanZanr' name='IskanZanr' required>
+                    <option value="" selected disabled>Izberi žanr</option>
                       %for ime in zanr2:
                         <option>{{ime[0]}}</option>
                       %end

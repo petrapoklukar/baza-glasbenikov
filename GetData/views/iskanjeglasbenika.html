@@ -84,27 +84,21 @@
                     <tr>
                       <th class="col-sm-1">#</th>
                       <th class="col-sm-1">Uporabniško ime</th>
-                      <th class="col-sm-1">Ime</th>
-                      <th class="col-sm-1">Priimek</th>
                       <th class="col-sm-1">Spol</th>
-                      <th class="col-md-1">Email</th>
                       <th class="col-sm-1">Igra inštrument</th>
-                      <th class="col-md-1">Stopnja znanja</th>
-                      <th class="col-md-1">Leto rojstva</th>
-                      <th class="col-md-1">Občina delovanja</th> 
-                      <th class="col-md-1">Žanr</th>
-                      <th class="col-md-1">Išče skupino, ki igra žanr</th> 
-                      <th class="col-md-1">&nbsp;</th>
+                      <th class="col-sm-1">Stopnja znanja</th>
+                      <th class="col-sm-1">Leto rojstva</th>
+                      <th class="col-sm-1">Občina delovanja</th> 
+                      <th class="col-sm-1">Žanr</th>
+                      <th class="col-sm-1">Išče skupino, ki igra žanr</th> 
+                      <th class="col-sm-1">&nbsp;</th>
                     </tr>
 
                     %for cifra, element in enumerate(IskanjeGlasbenika):
                     <tr>
                       <td>{{cifra + 1}}</td>
                       <td>{{element[0]}}</td>
-                      <td>{{element[1]}}</td>
-                      <td>{{element[2]}}</td>
                       <td>{{element[3]}}</td>
-                      <td>{{element[4]}}</td>
                       <td>{{element[5]}}</td>
                       <td>{{element[6]}}</td>
                       <td>{{element[7]}}</td>
@@ -113,7 +107,7 @@
                       <td>{{element[10]}}</td>
                       <td>
                         <p>
-                            <a class="btn btn-info" href="/uporabnik/{{element[0]}}">Ogled profila</a>         
+                            <a class="btn btn-info btn-sm" href="/uporabnik/{{element[0]}}">Ogled profila</a>         
                         </p>
                       </td>
                     </tr>

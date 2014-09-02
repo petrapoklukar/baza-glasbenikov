@@ -102,9 +102,15 @@
 		    <br>
 
         <div class="form-group">
+          
           <label for="letoust" class="col-sm-2 control-label">Leto ustanovitve</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="letoust" name="letoust" placeholder="Vnesi leto">
+            <select class="form-control" id='letoust' name='letoust' required>
+              <option id="disa" value="" selected disabled>Izberi leto ustanovitve</option>
+                %for leto in MoznaLeta:
+                  <option>{{leto}}</option>
+                %end
+            </select>
           </div>
         </div>
 		    <br>

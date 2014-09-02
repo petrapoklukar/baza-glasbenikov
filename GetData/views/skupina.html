@@ -147,11 +147,16 @@
                   <div class="col-sm-2"></div>
 
                   <div class="col-sm-9">
-                     <input type="text" name="datum_ustanovitve_nov" class="form-control" placeholder="Spremeni datum ustanovitve">
+                    <select class="form-control" id='novolevo_ust' name='novolevo_ust'>
+                      <option id="disa" value="" selected disabled>Izberi novo leto ustanovitve</option>
+                        %for leto in MoznaLeta:
+                          <option>{{leto}}</option>
+                        %end
+                    </select>
                   </div>
 
                   <div class="col-sm-1">
-                      <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
+                    <button type="submit" class="btn btn-primary btn-sm" id="spremeni">Spremeni</button>
                   </div>
                   <br>
                 </div>
@@ -280,10 +285,10 @@
             <td>{{element[1]}}</td>
             <td>{{element[2]}}</td>
             <td>{{element[3]}}</td>
-            %if JeClan:
+            %if JeClan and len(Clani) > 1:
               <td>
                 <form action="/skupina/{{skupina_stran}}" method="post">
-                   <p><input type="hidden" name="delete" value="{{"1"+element[1]}}">
+                   <p><input type="hidden" name="delete" value="{{"1,"+element[1]}},{{element[2]}}">
                    <input type="submit" value="Izbriši" name="submit"></p>
                 </form>
               </td>

@@ -3,6 +3,7 @@ import bottle
 import sqlite3
 import psycopg2, psycopg2.extensions, psycopg2.extras
 import hashlib # računanje MD5 kriptografski hash za gesla
+import datetime
 
 
 # KONFIGURACIJA
@@ -10,7 +11,8 @@ psycopg2.extensions.register_type(psycopg2.extensions.UNICODE) # se znebimo prob
 conn = psycopg2.connect(database='seminarska_matjazz', host='audrey.fmf.uni-lj.si', user='matjazz', password='marmelada')
 conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT) # onemogocimo transakcije
 cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
+TrenutniDatum = datetime.datetime.now()
+TrenutnoLeto = TrenutniDatum.year
 
 # Static Routes
 @bottle.get('/<filename:re:.*\.js>')
@@ -166,10 +168,11 @@ def iskanje():
     isce2 = bottle.request.forms.getunicode('isce2')
 
     zadetki = (obcina2, zanr2, isce2)
+    print(zadetki)
 
     select_stavek = """SELECT DISTINCT ime, datum_ustanovitve, spletna_stran, fb, obcina, igra_zanr, glasbilo, spol, stevilo FROM skupina
-        JOIN skupina_deluje_v_okolici ON skupina.ime = skupina_deluje_v_okolici.skupina
-        JOIN skupina_igra_zanr ON skupina.ime = skupina_igra_zanr.skupina
+        LEFT JOIN skupina_deluje_v_okolici ON skupina.ime = skupina_deluje_v_okolici.skupina
+        LEFT JOIN skupina_igra_zanr ON skupina.ime = skupina_igra_zanr.skupina
         LEFT JOIN skupina_isce ON skupina.ime = skupina_isce.skupina
         WHERE"""
     
@@ -253,10 +256,12 @@ def noviuporabnik():
     
     cur.execute("SELECT spol FROM spol")
     CurSpol =  cur.fetchall()
+
+    MoznaLeta = [i for i in range(TrenutnoLeto-90, TrenutnoLeto+1)]
     
     return bottle.template('signin.html', glasbilo=glasbilo, obcina=CurObcina, zanr=CurZanr,
                            stopnja=CurStopnja, spol=CurSpol, napaka=None, uporime=None,
-                           ime1=None, priimek1=None, mail1=None, letorojstva=None)
+                           ime1=None, priimek1=None, mail1=None, letorojstva=None, MoznaLeta = MoznaLeta)
    
 
 @bottle.route('/uporabnik/:uporime_stran')
@@ -321,11 +326,14 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
     cur.execute("SELECT skupina FROM clani_skupine WHERE clan = %s", (uporime_stran,) )
     CurIgraneSkupine = cur.fetchall()
 
+    MoznaLeta = [i for i in range(TrenutnoLeto-90, TrenutnoLeto+1)]
+
     return bottle.template('uporabnik.html',
                            uporime1=uporime_stran,
                            uporime2=uporime_login,
                            TabelaInstrumentov=CurTabelaInstrumentov,
                            ObcinaDelovanja=CurObcinaDelovanja,
+                           MoznaLeta = MoznaLeta,
                            IgranZanr=CurZanr,
                            IskanZanr=CurZanr2,
                            Uporabnik=CurUporabnik,
@@ -350,7 +358,7 @@ def uporabnik_change(uporime_stran):
     (uporime_login, ime_login, priimek_login, geslo_login) = get_user()
     
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
-    sporocila = [] 
+    sporocila = []
     
     # Brisanje podatkov
     if 'delete' in bottle.request.POST.keys():
@@ -528,6 +536,7 @@ def signin():
     geslo1 = bottle.request.forms.getunicode('geslo1')
     geslo2 = bottle.request.forms.getunicode('geslo2')
     letozacetka = bottle.request.forms.getunicode('letozacetka')
+    print(obcina)
 
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     glasbilo = cur.fetchall()
@@ -591,7 +600,8 @@ def signin():
 
 @bottle.route('/novaskupina')
 def novaskupina():
-    return bottle.template('signinskupina.html', napaka=None)
+    MoznaLeta = [i for i in range(TrenutnoLeto-90, TrenutnoLeto+1)]
+    return bottle.template('signinskupina.html', napaka=None, MoznaLeta = MoznaLeta)
 
 @bottle.post('/signinskupina')
 def skupinasignin():
@@ -602,6 +612,7 @@ def skupinasignin():
     fb = bottle.request.forms.getunicode('fb')
     telefon = bottle.request.forms.getunicode('telefon')
     datum = leto_ust+"-01-01"
+    if telefon == '' or telefon == None: telefon='000000000'
 
     # Kdo je prijavljeni uporabnik? 
     (uporime_login, ime_login, priimek_login, geslo) = get_user()
@@ -619,8 +630,7 @@ def skupinasignin():
     # Pogledamo kaj igra uporabnik, ki je ustvaril skupino in vse to dodamo v tabele;
     cur.execute("SELECT glasbilo FROM igra_poje WHERE glasbenik=%s", (uporime_login,))
     Instrumenti = cur.fetchall()
-    print(Instrumenti)
-    
+
     for glasbilo in Instrumenti:
         # Tisti ki ustvari skupino je avtomatično njen član
         cur.execute("""INSERT INTO clani_skupine(skupina, clan, glasbilo)
@@ -677,11 +687,15 @@ def skupinska_stran(skupina_stran,sporocila=[]): # v argumentu funkcije je infor
     cur.execute("""SELECT ime, datum_ustanovitve, e_mail, spletna_stran, fb, telefonska_stevilka FROM skupina
         WHERE ime = %s""", (skupina_stran,))
     CurSkupina=cur.fetchall()
+
+    MoznaLeta = [i for i in range(TrenutnoLeto-90, TrenutnoLeto+1)]
+    
     return bottle.template('skupina.html',
                            skupina_stran=skupina_stran,
                            uporime = uporime_login,
                            Clani=CurClani,
                            JeClan=JeClan,
+                           MoznaLeta = MoznaLeta,
                            Iskani_clani=CurIskaniClani,
                            ObcinaDelovanja=CurObcinaDelovanja,
                            IgranZanr=CurZanr,
@@ -714,10 +728,10 @@ def skupina_change(skupina_stran):
         # število na začetku elementa izbrisa nam pove, kateri podatek želimo zbrisati. Pokaže nam pravo tabelo
         # Legenda: 1-igrana glasbila, 2-obcina delovanja, 3-igran zanr, 4-iskan zanr
         #a,b,c=element_izbris
-        print(element_izbris)
         if element_izbris[0]=='1':
             clan=element_izbris[1:]
-            cur.execute('DELETE FROM clani_skupine WHERE skupina = %s AND clan = %s', (skupina_stran, clan))
+            split = element_izbris.split(',')
+            cur.execute('DELETE FROM clani_skupine WHERE skupina = %s AND clan = %s AND glasbilo = %s', (skupina_stran, split[1], split[2]))
             sporocila.append(("alert-success", "Vrgli ste člana iz skupine."))
             
         elif element_izbris[0]=='2':
@@ -742,7 +756,7 @@ def skupina_change(skupina_stran):
     #Popravljeno ime skupine
     ime_novo = bottle.request.forms.getunicode('ime_novo')
     # Popravljen datum ustanovitve
-    datum_ustanovitve_nov = bottle.request.forms.datum_ustanovitve_nov#getunicode('ime_novo')
+    novoleto_ust = bottle.request.forms.getunicode('novolevo_ust')
     # Nov email
     email_nov = bottle.request.forms.getunicode('email_nov')
     # Nova spletna stran
@@ -755,14 +769,15 @@ def skupina_change(skupina_stran):
     # Preverimo staro geslo
     cur.execute ("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s",(uporime_login,))
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
-    if (datum_ustanovitve_nov or email_nov or spl_stran_nova or fb_nov or telefon_nov)!= None:
+    if (ime_novo or novoleto_ust or email_nov or spl_stran_nova or fb_nov or telefon_nov)!= None:
         if cur.fetchone():
             # Geslo je ok
             if ime_novo != '':
                 cur.execute("UPDATE skupina SET ime=%s WHERE ime=%s", (ime_novo, skupina_stran))
                 sporocila.append(("alert-success", "Spremenili ste si ime skupine."))
                 skupina_stran = ime_novo
-            if datum_ustanovitve_nov != "":
+            if novoleto_ust != "" and novoleto_ust != None:
+                datum_ustanovitve_nov = novoleto_ust +'-01-01'
                 cur.execute("UPDATE skupina SET datum_ustanovitve=%s WHERE ime=%s", (datum_ustanovitve_nov, skupina_stran))
                 sporocila.append(("alert-success", "Spremenili ste datum ustanovitve."))
             if email_nov != "":
