@@ -5815,7 +5815,7 @@ button.close {
   right: 10px;
 }
 
-#obroba{
+#obroba {
   border: 1px solid #a1a1a1;
 }
 
@@ -5823,8 +5823,11 @@ button.close {
   padding: 4px;
   margin-left: 15px;
   margin-bottom: 3px;
-  
 
+}
+
+#novaskupina {
+  margin-bottom: 20px;
 }
 
 select option { color: black; }

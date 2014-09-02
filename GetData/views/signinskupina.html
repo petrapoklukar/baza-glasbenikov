@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    <title>Glasbenik.pikasi</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="jumbotron.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+  <div class="row">
+  		<div class="col-md-1"></div>
+         <div class="col-md-10">
+            <div class="page-header">
+               <h1>GLASBENIK.PIKASI <small>Portal za glasbenike</small></h1>
+            </div>
+         </div>
+      <div class="col-md-1"></div>
+   </div>
+
+  <div class="row">
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+
+      <div class="btn-group btn-group-justified">
+
+        <div class="btn-group">
+          <form role="form" action="/" method="get">
+            <button type="submit" class="btn btn-default" id="meni1">Nazaj na iskanje</button>
+          </form>
+        </div>
+
+        <div class="btn-group">
+          <form role="form" action="/login" method="get">
+            <button type="submit" class="btn btn-default" id="meni1" >Log in</button>
+          </form>
+        </div>
+      </div>
+
+      <hr id="prijava">
+      <br>
+
+    </div>
+
+    <div class="col-md-1">
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+      <h2 class="form-signin-heading">Registracija skupine</h2>
+      %if napaka:
+        <div class="alert alert-warning">{{napaka}}</div>
+      %end
+    </div>
+
+    <div class="col-md-1">
+    </div>
+  </div>
+  <br>
+
+  <div class="row">
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+      <form class="form-horizontal" role="form" action="/signinskupina" method="post">
+
+        <div class="form-group">
+          <label for="imeskupine" class="col-sm-2 control-label">Ime skupine</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="imeskupine" name="imeskupine" placeholder="Vnesi ime skupine" required>
+          </div>
+        </div>
+		    <br>
+
+        <div class="form-group">
+          <label for="letoust" class="col-sm-2 control-label">Leto ustanovitve</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="letoust" name="letoust" placeholder="Vnesi leto">
+          </div>
+        </div>
+		    <br>
+
+        <div class="form-group">
+          <label for="mail1" class="col-sm-2 control-label">Elektronski naslov</label>
+          <div class="col-sm-10">
+            <input type="email" class="form-control" id="mailskupine" name="mailskupine" placeholder="Vnesi elektronski naslov" required>
+          </div>
+        </div>
+		    <br>
+
+        <div class="form-group">
+          <label for="webskupine" class="col-sm-2 control-label">Spletna stran skupine</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="webskupine" name="webskupine" placeholder="Vnesi spletni naslov">
+          </div>
+        </div>
+        <br>
+
+        <div class="form-group">
+          <label for="fb" class="col-sm-2 control-label">Facebook stran skupine</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="fb" name="fb" placeholder="Vnesi spletni naslov fb strani">
+          </div>
+        </div>
+        <br>
+		
+		    <div class="form-group">
+          <label for="telefon" class="col-sm-2 control-label">Telefonska stevilka kontaktne osebe</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="telefon" name="telefon" placeholder="Vnesi telefonsko številko">
+          </div>
+        </div>
+        <br>
+
+        <br>
+        <button type="submit" class="btn btn-primary">Sign in</button>
+      </form>
+    </div>
+
+	   <div class="col-md-1">
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-md-1">
+    </div>
+
+    <div class="col-md-10">
+      <footer>
+        <hr>
+        <p>&copy; PetraP & RokI & MatjazZ 2014</p>
+        </footer>
+    </div>
+
+    <div class="col-md-1">
+    </div>
+  </div> <!-- /container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+  </body>
+</html>

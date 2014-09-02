@@ -19,6 +19,8 @@ def javascripts(filename):
 
 @bottle.get('/<filename:re:.*\.css>')
 def stylesheets(filename):
+    f = filename.split('/')
+    filename = f[-1]
     return bottle.static_file(filename, root='static/css')
 
 @bottle.get('/<filename:re:.*\.(jpg|png|gif|ico)>')
@@ -31,7 +33,6 @@ def fonts(filename):
 
 # Ostalo
 
-# Bauerjevi cookiji :) (copy-paste)
 # Skrivnost za kodiranje cookijev
 secret = "travažgečkapodplate87ztszfg8ez78"
 
@@ -64,7 +65,6 @@ def get_user(auto_login = True):
     username = bottle.request.get_cookie('username', secret=secret)
     # Preverimo, ali ta uporabnik obstaja
     if username is not None:
-        #CurPrijavljen=conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cur.execute("SELECT uporabnisko_ime, ime, priimek, geslo FROM glasbenik WHERE uporabnisko_ime=%s",
                   (username,))
         r = cur.fetchone()
@@ -73,7 +73,7 @@ def get_user(auto_login = True):
             return r
     # Če pridemo do sem, uporabnik ni prijavljen, naredimo redirect
     if auto_login:
-        bottle.redirect('/')
+        bottle.redirect('/login')
     else:
         return None
 
@@ -163,8 +163,6 @@ def iskanje():
 def iskanje():
     obcina2 = bottle.request.forms.getunicode('obcina2')
     zanr2 = bottle.request.forms.getunicode('zanr2')
-    #isceclane = bottle.AutoServerrequest.forms.get('isceclane')
-
     isce2 = bottle.request.forms.getunicode('isce2')
 
     zadetki = (obcina2, zanr2, isce2)
@@ -191,13 +189,11 @@ def iskanje():
 
     cur.execute(select_stavek, (parametri))
     CurIskanjeSkupine = cur.fetchall()
-    print(CurIskanjeSkupine)
     
     return bottle.template('iskanjeskupine.html', IskanjeSkupine = CurIskanjeSkupine)
 
 
 @bottle.get('/login')
-#@bottle.post('/login')
 @bottle.route('/login')
 @bottle.route('/login/')
 def login_get():
@@ -214,6 +210,7 @@ def logout():
 @bottle.post("/login")
 def login_post():
     """Obdelaj izpolnjeno formo za prijavo"""
+    
     # Uporabniško ime, ki ga je uporabnik vpisal v formo
     username = bottle.request.forms.getunicode('uporime')
    
@@ -233,13 +230,14 @@ def login_post():
     else:
         # Vse je v redu, nastavimo cookie in preusmerimo na glavno stran
         bottle.response.set_cookie('username', username, path='/', secret=secret)
-        bottle.redirect("/"+username) 
+        bottle.redirect("/uporabnik/"+username) 
+
 
 
 @bottle.post('/noviuporabnik')
 @bottle.route('/noviuporabnik')
 @bottle.route('/noviuporabnik/')
-# registracija-get
+# servira formo za signin
 def noviuporabnik():
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     glasbilo = cur.fetchall()
@@ -259,13 +257,18 @@ def noviuporabnik():
     return bottle.template('signin.html', glasbilo=glasbilo, obcina=CurObcina, zanr=CurZanr,
                            stopnja=CurStopnja, spol=CurSpol, napaka=None, uporime=None,
                            ime1=None, priimek1=None, mail1=None, letorojstva=None)
+   
 
-
-@bottle.route('/:uporime_stran')
-@bottle.route('/:uporime_stran/')
-@bottle.route('/<uporime_stran>/')
-@bottle.route('/<uporime_stran>')
+@bottle.route('/uporabnik/:uporime_stran')
+@bottle.route('/uporabnik/:uporime_stran/')
+@bottle.route('/uporabnik/<uporime_stran>/')
+@bottle.route('/uporabnik/<uporime_stran>')
 def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je informacija na čigavi spletni strani smo
+    
+    cur.execute("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s", (uporime_stran,))
+    if cur.fetchone() is None:
+        return "Uporabnik ne obstaja"
+
     # Kdo je prijavljeni uporabnik? 
     (uporime_login, ime_login, priimek_login, geslo_login) = get_user()
     dolzina = len(password_md5(geslo_login)) - 10
@@ -286,7 +289,7 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
     CurZanrDropdown2 = cur.fetchall()
     
     cur.execute("SELECT spol FROM spol") # dropdown meni za spol (sprememba spola)
-    CurSpol = cur.fetchall()
+    CurSpolDropdown = cur.fetchall()
     
     # podatki o igranih instrumentih
     cur.execute("SELECT glasbilo, stopnja_znanja, leto_zacetka FROM igra_poje WHERE glasbenik = %s ", (uporime_stran,))
@@ -315,8 +318,9 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
     WHERE uporabnisko_ime = %s""", (uporime_stran,))
     CurUporabnik = cur.fetchall()
 
-    
-    #return print(type(CurUporabnik.fetchall()))
+    cur.execute("SELECT skupina FROM clani_skupine WHERE clan = %s", (uporime_stran,) )
+    CurIgraneSkupine = cur.fetchall()
+
     return bottle.template('uporabnik.html',
                            uporime1=uporime_stran,
                            uporime2=uporime_login,
@@ -332,15 +336,16 @@ def uporabnikova_stran(uporime_stran,sporocila=[]): # v argumentu funkcije je in
                            obcina=CurObcina,
                            zanr1=CurZanrDropdown1,
                            zanr2=CurZanrDropdown2,
-                           spol=CurSpol)
+                           spol=CurSpolDropdown,
+                           CurIgraneSkupine = CurIgraneSkupine)
 
 
-@bottle.post("/<uporime_stran>")
-@bottle.post("/<uporime_stran>/")
+@bottle.post("/uporabnik/<uporime_stran>")
+@bottle.post("/uporabnik/<uporime_stran>/")
 def uporabnik_change(uporime_stran):
 
     """Obdelaj formo za spreminjanje podatkov o uporabniku."""
-    
+   
     # Kdo je prijavljen?
     (uporime_login, ime_login, priimek_login, geslo_login) = get_user()
     
@@ -507,6 +512,7 @@ def uporabnik_change(uporime_stran):
 @bottle.post('/signin')
 @bottle.route('/signin')
 @bottle.route('/signin/')
+# Obdela formo za signin
 def signin():
     instrument = bottle.request.forms.getunicode('instrument')
     obcina = bottle.request.forms.getunicode('obcina')
@@ -578,9 +584,266 @@ def signin():
         
         # Daj uporabniku cookie
         bottle.response.set_cookie('username', uporime, path='/', secret=secret)
-        bottle.redirect("/"+uporime) #to je uporabil bauer-redirect
+        bottle.redirect("/uporabnik/"+uporime) #to je uporabil bauer-redirect
     
     #return bottle.template('uporabnik.html', uporime=uporime, TabelaInstrumentov=CurTabelaInstrumentov, Uporabnik=Uporabnik)
+
+
+@bottle.route('/novaskupina')
+def novaskupina():
+    return bottle.template('signinskupina.html', napaka=None)
+
+@bottle.post('/signinskupina')
+def skupinasignin():
+    ime_skupine = bottle.request.forms.getunicode('imeskupine')
+    leto_ust = bottle.request.forms.getunicode('letoust')
+    mail_skupine = bottle.request.forms.getunicode('mailskupine')
+    spletna_stran = bottle.request.forms.getunicode('webskupine')
+    fb = bottle.request.forms.getunicode('fb')
+    telefon = bottle.request.forms.getunicode('telefon')
+    datum = leto_ust+"-01-01"
+
+    # Kdo je prijavljeni uporabnik? 
+    (uporime_login, ime_login, priimek_login, geslo) = get_user()
+    
+##    # Ali uporabnik že obstaja?
+##    cur.execute("SELECT 1 FROM skupina WHERE ime=%s", ('banance'))
+##    CurRegistracija1 = cur.fetchone()
+##    print(CurRegistracija1)
+##    
+
+    # Vse je v redu, vstavi novo skupino v bazo
+    cur.execute("""INSERT INTO skupina(ime, datum_ustanovitve, e_mail, spletna_stran, fb, telefonska_stevilka)
+                            VALUES (%s, %s, %s, %s, %s, %s)""",(ime_skupine, datum, mail_skupine, spletna_stran, fb, telefon))
+
+    # Pogledamo kaj igra uporabnik, ki je ustvaril skupino in vse to dodamo v tabele;
+    cur.execute("SELECT glasbilo FROM igra_poje WHERE glasbenik=%s", (uporime_login,))
+    Instrumenti = cur.fetchall()
+    print(Instrumenti)
+    
+    for glasbilo in Instrumenti:
+        # Tisti ki ustvari skupino je avtomatično njen član
+        cur.execute("""INSERT INTO clani_skupine(skupina, clan, glasbilo)
+                                VALUES (%s, %s, %s)""", (ime_skupine, uporime_login, glasbilo[0]))
+    sporocila = [("alert-success", "Ustvarili ste novo skupino. Dobrodolšli.")]
+
+    return skupinska_stran(ime_skupine, sporocila=sporocila)
+
+@bottle.route('/skupina/<:skupina_stran/')
+@bottle.route('/skupina/<skupina_stran>') 
+def skupinska_stran(skupina_stran,sporocila=[]): # v argumentu funkcije je informacija na čigavi spletni strani smo
+    # preverimo ali skupina obstaja
+    cur.execute("SELECT 1 FROM skupina WHERE ime=%s", (skupina_stran,))
+    if cur.fetchone() is None:
+        return "Skupina ne obstaja"
+    
+    # Kdo je prijavljeni uporabnik? 
+    (uporime_login, ime_login, priimek_login, geslo) = get_user()
+
+    cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
+    CurGlasbilaDropdown=cur.fetchall() # dropdown meni glasbil za tabelo instrumentov
+
+    cur.execute("SELECT ime FROM obcina ORDER BY ime")
+    CurObcinaDropdown=cur.fetchall() # dropdown meni obcin za tabelo obcin
+    
+    cur.execute("SELECT ime FROM zanr ORDER BY ime")
+    CurZanrDropdown=cur.fetchall() # dropdown meni za igrane zanre
+
+    cur.execute("SELECT spol FROM spol") # dropdown meni za spol
+    CurSpolDropdown=cur.fetchall()
+
+    cur.execute("SELECT uporabnisko_ime FROM glasbenik") # dropdown meni za uporabnike baze
+    CurUporabnikiDropdown=cur.fetchall() 
+    
+    cur.execute("""SELECT DISTINCT skupina, clan, glasbilo, spol FROM clani_skupine
+                JOIN glasbenik ON uporabnisko_ime=clan
+                WHERE skupina = %s""", (skupina_stran,))
+    CurClani=cur.fetchall()
+
+    cur.execute("SELECT skupina, clan FROM clani_skupine WHERE skupina=%s", (skupina_stran,))
+    JeClan=[skupina_stran, uporime_login] in cur.fetchall() # ali je obiskovalec tudi clan skupine
+    
+    # podatki o iskanih članih
+    cur.execute("SELECT glasbilo, spol, stevilo FROM skupina_isce WHERE skupina = %s ", (skupina_stran,))
+    CurIskaniClani=cur.fetchall()
+    # podatki o obcini delovanja
+    cur.execute("SELECT obcina FROM skupina_deluje_v_okolici WHERE skupina = %s ", (skupina_stran,))
+    CurObcinaDelovanja=cur.fetchall()
+    # podatki o igranih zanrih
+    cur.execute("SELECT igra_zanr FROM skupina_igra_zanr WHERE skupina = %s ", (skupina_stran,))
+    CurZanr=cur.fetchall()
+    
+    # Osnovni podatki o skupini
+    cur.execute("""SELECT ime, datum_ustanovitve, e_mail, spletna_stran, fb, telefonska_stevilka FROM skupina
+        WHERE ime = %s""", (skupina_stran,))
+    CurSkupina=cur.fetchall()
+    return bottle.template('skupina.html',
+                           skupina_stran=skupina_stran,
+                           uporime = uporime_login,
+                           Clani=CurClani,
+                           JeClan=JeClan,
+                           Iskani_clani=CurIskaniClani,
+                           ObcinaDelovanja=CurObcinaDelovanja,
+                           IgranZanr=CurZanr,
+                           OsnovniSkupina=CurSkupina,
+                           sporocila=sporocila,
+                           Uporabniki=CurUporabnikiDropdown,
+                           glasbilo=CurGlasbilaDropdown,
+                           obcina=CurObcinaDropdown,
+                           zanr=CurZanrDropdown,
+                           spol=CurSpolDropdown)
+
+
+
+@bottle.post("/skupina/<skupina_stran>")
+def skupina_change(skupina_stran):
+
+    """Obdelaj formo za spreminjanje podatkov o uporabniku."""
+    # Kdo je prijavljen?
+    (uporime_login, ime_login, priimek_login, geslo) = get_user()
+    # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
+    sporocila = [] 
+
+    # Brisanje podatkov
+
+    if 'delete' in bottle.request.POST.keys():
+        #element_izbris = bottle.request.POST['delete'] # ne bere šumnikov
+        element_izbris=bottle.request.forms.getunicode('delete')
+        #input forma v html mora bit v "", sicer ignorira celotne besedne zveze-prebere le prvo besedo iz besedne zveze
+
+        # število na začetku elementa izbrisa nam pove, kateri podatek želimo zbrisati. Pokaže nam pravo tabelo
+        # Legenda: 1-igrana glasbila, 2-obcina delovanja, 3-igran zanr, 4-iskan zanr
+        #a,b,c=element_izbris
+        print(element_izbris)
+        if element_izbris[0]=='1':
+            clan=element_izbris[1:]
+            cur.execute('DELETE FROM clani_skupine WHERE skupina = %s AND clan = %s', (skupina_stran, clan))
+            sporocila.append(("alert-success", "Vrgli ste člana iz skupine."))
+            
+        elif element_izbris[0]=='2':
+            split=element_izbris.split(',')
+            cur.execute('DELETE FROM skupina_isce WHERE skupina = %s AND glasbilo = %s AND spol = %s', (skupina_stran, split[1], split[2]))
+            sporocila.append(("alert-success", "Izbrisali ste oglas za iskanega člana."))
+            
+        elif element_izbris[0]=='3':
+            obcina=element_izbris[1:]
+            cur.execute('DELETE FROM skupina_deluje_v_okolici WHERE skupina = %s AND obcina = %s', (skupina_stran, obcina))
+            sporocila.append(("alert-success", "Izbrisali ste občino delovanja."))
+            
+        elif element_izbris[0]=='4':
+            IgranZanr=element_izbris[1:]
+            cur.execute('DELETE FROM skupina_igra_zanr WHERE skupina = %s AND igra_zanr = %s', (skupina_stran, IgranZanr))
+            sporocila.append(("alert-success", "Izbrisali ste igran zanr."))
+        
+        
+        return skupinska_stran(skupina_stran, sporocila=sporocila)
+
+    # SPREMINJANJE OSEBNIH PODATKOV
+    #Popravljeno ime skupine
+    ime_novo = bottle.request.forms.getunicode('ime_novo')
+    # Popravljen datum ustanovitve
+    datum_ustanovitve_nov = bottle.request.forms.datum_ustanovitve_nov#getunicode('ime_novo')
+    # Nov email
+    email_nov = bottle.request.forms.getunicode('email_nov')
+    # Nova spletna stran
+    spl_stran_nova = bottle.request.forms.getunicode('spl_stran_nova')
+    # Nova fb stran
+    fb_nov = bottle.request.forms.getunicode('fb_nov')
+    # Nova telefnska številka
+    telefon_nov = bottle.request.forms.getunicode('telefon_nov')
+    
+    # Preverimo staro geslo
+    cur.execute ("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s",(uporime_login,))
+    # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
+    if (datum_ustanovitve_nov or email_nov or spl_stran_nova or fb_nov or telefon_nov)!= None:
+        if cur.fetchone():
+            # Geslo je ok
+            if ime_novo != '':
+                cur.execute("UPDATE skupina SET ime=%s WHERE ime=%s", (ime_novo, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste si ime skupine."))
+                skupina_stran = ime_novo
+            if datum_ustanovitve_nov != "":
+                cur.execute("UPDATE skupina SET datum_ustanovitve=%s WHERE ime=%s", (datum_ustanovitve_nov, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste datum ustanovitve."))
+            if email_nov != "":
+                cur.execute("UPDATE skupina SET e_mail=%s WHERE ime=%s", (email_nov, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste naslov vaše elektronske pošte."))
+            if spl_stran_nova != '':
+                cur.execute("UPDATE skupina SET spletna_stran=%s WHERE ime=%s", (spl_stran_nova, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste naslov vaše spletne strani."))
+            if fb_nov!= '':
+                cur.execute("UPDATE skupina SET fb=%s WHERE ime=%s", (fb_nov, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste naslov vaše facebook strani."))
+            if telefon_nov!= '':
+                cur.execute("UPDATE skupina SET telefonska_stevilka=%s WHERE ime=%s", (telefon_nov, skupina_stran))
+                sporocila.append(("alert-success", "Spremenili ste telefonsko številko vaše skupine."))     
+        else:
+            # Geslo ni ok
+            sporocila.append(("alert-danger", "Ne obstajate v bazi"))
+
+    else:
+        #VSTAVLJANJE PODATKOV O DEJAVNOSTI
+    
+        # TABELA CLANOV
+        clan_nov = bottle.request.forms.getunicode('clan_nov')
+        instrument_nov = bottle.request.forms.getunicode('instrument_nov')
+    
+        if clan_nov != None and instrument_nov != None:
+            # Pogledamo kaj igra uporabnik, ki je ustvaril skupino in vse to dodamo v tabele;
+            cur.execute("SELECT glasbilo FROM igra_poje WHERE glasbenik=%s", (clan_nov,))
+            Instrumenti = cur.fetchall()
+    
+            for glasbilo in Instrumenti:
+            # Tisti ki ustvari skupino je avtomatično njen član
+                cur.execute("""INSERT INTO clani_skupine(skupina, clan, glasbilo)
+                                    VALUES (%s, %s, %s)""", (skupina_stran, clan_nov, glasbilo[0]))
+            sporocila.append(("alert-success", "Dodali ste člana."))
+            
+
+        # TABELA ISKANIH PROFILOV
+        instrument = bottle.request.forms.getunicode('iskanoglasbilo')
+        spol = bottle.request.forms.getunicode('spol')
+        stevilo=bottle.request.forms.getunicode('stevilo')
+
+        if (instrument and spol and stevilo) != None:
+            cur.execute("INSERT INTO skupina_isce(skupina, glasbilo, spol, stevilo) VALUES (%s, %s, %s, %s)", (skupina_stran, instrument, spol, stevilo))
+            sporocila.append(("alert-success", "Dodali ste iskanega člana."))
+    
+        # TABELA OBCIN
+        obcina = bottle.request.forms.getunicode('obcina')
+
+        if obcina!=None:
+            cur.execute("INSERT INTO skupina_deluje_v_okolici(skupina, obcina) VALUES (%s,%s)",
+                        (skupina_stran, obcina))
+            sporocila.append(("alert-success", "Dodali ste obcino."))
+
+        # TABELA IGRANIH ZANROV
+        IgranZanr = bottle.request.forms.getunicode('IgranZanr')
+
+        if IgranZanr!=None:
+            cur.execute("INSERT INTO skupina_igra_zanr(skupina, igra_zanr) VALUES (%s,%s)",
+                        (skupina_stran, IgranZanr))
+            sporocila.append(("alert-success", "Dodali ste igran žanr."))
+
+    
+    # Prikažemo stran z uporabnikom, z danimi sporočili. Kot vidimo,
+    # lahko kar pokličemo funkcijo, ki servira tako stran
+    
+    return skupinska_stran(skupina_stran, sporocila=sporocila)
+
+    
+@bottle.post("/brisi/<skupina_stran>")
+def skupina_change(skupina_stran):
+    # Brisanje podatkov
+    (uporime_login, ime_login, priimek_login, geslo) = get_user()
+    # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
+    sporocila = []
+    
+    if 'delete' in bottle.request.POST.keys():
+        cur.execute('DELETE FROM skupina WHERE ime = %s', (skupina_stran,))
+        sporocila.append(("alert-success", "Izbrisali ste skupino {0}.".format(skupina_stran)))
+    return uporabnikova_stran(uporime_login,sporocila=sporocila)
+
 
 
 bottle.run(host='localhost', port=8080, debug=True)

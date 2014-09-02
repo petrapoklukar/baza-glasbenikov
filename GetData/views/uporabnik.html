@@ -107,10 +107,11 @@
         <div class="col-md-1"></div>
         
         <div class="col-md-10" id="obroba">
-          <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+          <br>
+          <form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">
 
             %for st,element in enumerate(Uporabnik):
-              <br>
+              
   		        %if st==0:
                 <div class="form-group">
                   <label for="ime1" class="col-sm-2 control-label">Ime</label>
@@ -341,7 +342,7 @@
 
           %if uporime1==uporime2:
             <h5>Dodaj glasbilo</h5>
-            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+            <form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">
               <div class="form-group">
 
                 <label for="instrument" class="col-sm-2 control-label">glasbilo, ki ga igraš</label>
@@ -409,7 +410,7 @@
               <td>&nbsp;</td>
               %if uporime1==uporime2:
                 <td>
-                  <form action="/{{uporime1}}" method="post">
+                  <form action="/uporabnik/{{uporime1}}" method="post">
                      <p><input type="hidden" name="delete" value="{{"2"+element[0]}}">
                      <input type="submit" value="Izbriši" name="submit"></p>
                   </form>
@@ -423,7 +424,7 @@
 
           %if uporime1==uporime2:
           <h5>Dodaj občino</h5>
-            <form action="/{{uporime1}}" method="post">
+            <form action="/uporabnik/{{uporime1}}" method="post">
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoja občina delovanja</label>
                 <div class="col-sm-9">
@@ -485,7 +486,7 @@
 
           %if uporime1==uporime2:
             <h5>Dodaj igran žanr</h5>
-            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+            <form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoji igrani žanri</label>
                 <div class="col-sm-9">
@@ -548,7 +549,7 @@
 
           %if uporime1==uporime2:
             <h5>Dodaj iskan žanr</h5>
-            <form class="form-horizontal" role="form" action="/{{uporime1}}" method="post">
+            <form class="form-horizontal" role="form" action="/uporabnik/{{uporime1}}" method="post">
 
               <div class="form-group">
                 <label for="instrument" class="col-sm-2 control-label">tvoji iskani žanri</label>
@@ -570,6 +571,46 @@
 
         <div class="col-md-1"></div>
       </div>
+      <br>
+	  
+	  <div class="row">
+        
+        <div class="col-md-1"></div>
+
+        <div class="col-md-10" id="obroba">
+          <h5>Tabela tvojih skupin</h5>
+          <table class="table table-hover">
+            <tr>
+              <th class="col-sm-2">#</th>
+              <th class="col-md-3">Skupina</th>
+              <th class="col-md-3">&nbsp;</th>
+              <th class="col-md-3">&nbsp;</th>
+              <th class="col-md-1">&nbsp;</th>
+            </tr>
+
+            %for cifra, element in enumerate(CurIgraneSkupine):
+              <tr>
+                <td>{{cifra + 1}}</td>
+                <td>{{element[0]}}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+        				<td>
+        						<a class="btn btn-primary btn-sm" href="/skupina/{{element[0]}}">Ogled profila skupine</a>
+        				</td>
+             
+              </tr>
+            %end
+          
+          </table>
+
+          %if uporime1==uporime2:    
+            <a class="btn btn-primary" href="/novaskupina" id="novaskupina">Ustvari novo skupino</a>
+            <br>
+          %end
+        </div>
+
+        <div class="col-md-1"></div>
+    </div>
 
     <div class="row">
       <div class="col-md-1"></div>
