@@ -1,13 +1,15 @@
-create schema public;
+Ôªø-- Ali je treba pri REFERENCES zanr/obcina/.. dodati tudi CHECK ki bo preveril a je vnos pravilen?
 
 CREATE TABLE glasbenik (
-uporabnisko_ime TEXT PRIMARY KEY,
-ime TEXT,
-priimek TEXT,
-spol TEXT NOT NULL REFERENCES spol(spol),
-e_mail TEXT NOT NULL,
-leto_rojstva INTEGER NOT NULL
+	uporabnisko_ime TEXT PRIMARY KEY,
+	ime TEXT, 
+	priimek TEXT,
+	spol TEXT NOT NULL, 
+	e_mail TEXT NOT NULL,
+	leto_rojstva INTEGER NOT NULL
+	geslo TEXT NOT NULL
 );
+
 
 -- Dodatna tabela, ki smo jo pozabili prej naredit
 CREATE TABLE glasbenik_igra_zanr (
@@ -16,131 +18,153 @@ igra_zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
 PRIMARY KEY (glasbenik, igra_zanr)
 );
 
--- Glasbenik mora imeti moûnost izbiranja med veËimi ûanri, zato ne more imeti atributa isce_skupino_ki_igra_zanr ker bi potem lahko izbral samo enega.
--- »e se izbriöe glasbenika, potem on ne iöËe veË skupine
+
+-- Glasbenik mora imeti mo≈ænost izbiranja med veƒçimi ≈æanri, zato ne more imeti atributa isce_skupino_ki_igra_zanr ker bi potem lahko izbral samo enega. 
+-- ƒåe se izbri≈°e glasbenika, potem on ne i≈°ƒçe veƒç skupine
 CREATE TABLE glasbenik_isce_skupino (
-glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
-PRIMARY KEY (glasbenik, zanr)
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
+	PRIMARY KEY (glasbenik, zanr)
 );
 
--- Glasbenik lahko izbere veË obËin v katerih lahko deluje.
+
+
+-- Glasbenik lahko izbere veƒç obƒçin v katerih lahko deluje. 
 CREATE TABLE glasbenik_deluje_v_okolici (
-glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-obcina TEXT NOT NULL REFERENCES obcina(ime) ON UPDATE CASCADE,
-PRIMARY KEY (glasbenik, obcina)
+	glasbenik TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	obcina TEXT NOT NULL REFERENCES obcina(ime) ON UPDATE CASCADE,
+	PRIMARY KEY (glasbenik, obcina)
 );
 
+
+CREATE TABLE model ( --popravek ≈°ibka entiteta
+	ime TEXT NOT NULL, -- del primarnega kljuƒça 
+	lastnik TEXT REFERENCES glasbenik(uporabnisko_ime)
+		ON DELETE CASCADE -- ƒçe se uporabnik izbri≈°e, tudi glasbilo ni veƒç na voljo
+		ON UPDATE CASCADE,
+	vrsta_glasbila TEXT REFERENCES tip_glasbila_ali_vokal(ime)
+		ON UPDATE CASCADE,	
+	za_izposojo BOOLEAN,
+	PRIMARY KEY(ime, lastnik)
+);
 
 
 CREATE TABLE igra_poje (
-glasbenik TEXT REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-glasbilo TEXT REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
-stopnja_znanja TEXT NOT NULL REFERENCES stopnja_znanja(stopnja), -- na voljo bodo samo tri moznosti: beginner, intermediate, advanced
-leto_zacetka INTEGER NOT NULL,
-PRIMARY KEY (glasbenik, glasbilo)
+	glasbenik TEXT REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	glasbilo TEXT REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
+	stopnja_znanja TEXT NOT NULL REFERENCES stopnja_znanja(stopnja), -- na voljo bodo samo tri moznosti: beginner, intermediate, advanced
+	leto_zacetka INTEGER,
+	PRIMARY KEY (glasbenik, glasbilo)
 );
 
--- Glede stvarnika skupine: lahko dovolimo, da se naredi skupine brez Ëlanov in se kasneje doda njene Ëlane (v neko novo tabelo). Tukej mormo mal pazit
--- na zaporedje vnosov v bazo - da bo folk lahko sploh naredu skupino (nevem Ëe se spomneta k je Bauer o tem govoru).
+
+
+-- Glede stvarnika skupine: lahko dovolimo, da se naredi skupine brez ƒçlanov in se kasneje doda njene ƒçlane (v neko novo tabelo). Tukej mormo mal pazit 
+-- na zaporedje vnosov v bazo - da bo folk lahko sploh naredu skupino (nevem ƒçe se spomneta k je Bauer o tem govoru).
 CREATE TABLE skupina(
-ime TEXT PRIMARY KEY,
-datum_ustanovitve DATE,
-e_mail TEXT NOT NULL,
-spletna_stran TEXT,
-fb TEXT,
-telefonska_stevilka INTEGER
+	ime TEXT PRIMARY KEY,
+	datum_ustanovitve DATE,
+	e_mail TEXT NOT NULL,
+	spletna_stran TEXT,
+	fb TEXT,
+	telefonska_stevilka INTEGER
 );
 
--- Skupina lahko igra veË ûanrov, zato ûanr ne more biti njen atribut. »e se kupino izbiöe, potem ona ne igra veË nobenga ûanra.
+
+-- Skupina lahko igra veƒç ≈æanrov, zato ≈æanr ne more biti njen atribut. ƒåe se kupino izbi≈°e, potem ona ne igra veƒç nobenga ≈æanra.
 CREATE TABLE skupina_igra_zanr (
-skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-igra_zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
-PRIMARY KEY (skupina, igra_zanr)
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	igra_zanr TEXT NOT NULL REFERENCES zanr(ime) ON UPDATE CASCADE,
+	PRIMARY KEY (skupina, igra_zanr)
 );
 
--- »lani skupine. »e se izbriöe skupino, nima veË Ëlanov. »e se izbriöe glasbenika, ni veË Ëlan skupine.
+
+-- Glasbenik je lahko ƒçlan veƒçih skupin, zato tudi ne more imeti atributa je_clan. ƒåe se izbri≈°e glasbenika, ni veƒç ƒçlan skupine, ƒåe se izbri≈°e skupino, potem
+-- ne more biti nihƒçe njen ƒçlan.
+-- ƒålani skupine. ƒåe se izbri≈°e skupino, nima veƒç ƒçlanov. ƒåe se izbri≈°e glasbenika, ni veƒç ƒçlan skupine.
 CREATE TABLE clani_skupine (
-skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-clan TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
-PRIMARY KEY (skupina, clan)
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	clan TEXT NOT NULL REFERENCES glasbenik(uporabnisko_ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	glasbilo TEXT NOT NULL REFERENCES tip_glasbila_ali_vokal(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	PRIMARY KEY (skupina, clan, glasbilo)
 );
 
--- Glede delovanja skupine se men zdi smiselno da lahko skupina deluje v veËih obËinah, ampak lahko tud popravmo to.
+
+-- Glede delovanja skupine se men zdi smiselno da lahko skupina deluje v veƒçih obƒçinah, ampak lahko tud popravmo to.
 CREATE TABLE skupina_deluje_v_okolici (
-skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-obcina TEXT NOT NULL REFERENCES obcina(ime) ON UPDATE CASCADE,
-PRIMARY KEY (skupina, obcina)
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	obcina TEXT NOT NULL REFERENCES obcina(ime) ON UPDATE CASCADE,
+	PRIMARY KEY (skupina, obcina)
 );
 
--- »e se izbriöe skupino, potem ona ne iöËe veË glasbil.
+-- ƒåe se izbri≈°e skupino, potem ona ne i≈°ƒçe veƒç glasbil.
 CREATE TABLE skupina_isce(
-skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-glasbilo TEXT NOT NULL REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
-spol TEXT REFERENCES spol(spol) ON UPDATE CASCADE DEFAULT 'vseeno', -- na voljo bo samo M, Z, vseeno
-stevilo INTEGER DEFAULT 1, -- atribut pove, koliko glasbenikov igrajoË dolocen instrument, isce skupina.
-PRIMARY KEY (skupina, glasbilo, spol)
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	glasbilo TEXT NOT NULL REFERENCES tip_glasbila_ali_vokal(ime) ON UPDATE CASCADE,
+	spol TEXT REFERENCES spol(spol) ON UPDATE CASCADE DEFAULT 'vseeno', -- na voljo bo samo M, Z, vseeno
+	stevilo INTEGER DEFAULT 1, -- atribut pove, koliko glasbenikov igrajoƒç dolocen instrument, isce skupina. 
+	PRIMARY KEY (skupina, glasbilo,spol)
 );
 
--- ObËine ne moremo izbrisati, dokler obstaja vadnica, ki se nahaja v njej
+-- Obƒçine ne moremo izbrisati, dokler obstaja vadnica, ki se nahaja v njej
 CREATE TABLE vadnica (
-id SERIAL PRIMARY KEY ,
-e_mail TEXT NOT NULL,
-telefonska_stevilka INTEGER,
-ime TEXT,
-se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
+	id SERIAL PRIMARY KEY , 
+	e_mail TEXT NOT NULL, 
+	telefonska_stevilka INTEGER, 
+	ime TEXT,
+	se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- ObËine ne moremo izbrisati, dokler obstaja koncertno prizorisce, ki se nahaja v njej
+-- Obƒçine ne moremo izbrisati, dokler obstaja koncertno prizorisce, ki se nahaja v njej
 CREATE TABLE koncertno_prizorisce (
-id SERIAL PRIMARY KEY,
-e_mail TEXT NOT NULL,
-telefonska_stevilka INTEGER,
-ime TEXT,
-se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
+	id SERIAL PRIMARY KEY,
+	e_mail TEXT NOT NULL, 
+	telefonska_stevilka INTEGER, 
+	ime TEXT, 
+	se_nahaja_v TEXT NOT NULL REFERENCES obcina(ime) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
--- Koncertnega prizoriöËa ne moremo izbrisati, Ëe obstaja event, ki se je odvijal tam.
+-- Koncertnega prizori≈°ƒça ne moremo izbrisati, ƒçe obstaja event, ki se je odvijal tam.
 CREATE TABLE event (
-datum DATE NOT NULL,
-ime TEXT NOT NULL,
-prizorisce INTEGER REFERENCES koncertno_prizorisce(id) ON DELETE RESTRICT ON UPDATE CASCADE,
-PRIMARY KEY (datum, ime)
+	datum DATE NOT NULL, 
+	ime TEXT NOT NULL, 
+	prizorisce INTEGER REFERENCES koncertno_prizorisce(id) ON DELETE RESTRICT ON UPDATE CASCADE,
+	PRIMARY KEY (datum, ime)
 );
 
--- Tukej nevem kaj bi blo najbl smiselno: Ëe se skupino izbriöe a se potem izbriöejo tudi vsi eventi na katerih je igrala?
+-- Tukej nevem kaj bi blo najbl smiselno: ƒçe se skupino izbri≈°e a se potem izbri≈°ejo tudi vsi eventi na katerih je igrala?
 CREATE TABLE skupina_je_igrala (
-skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
-event_datum DATE NOT NULL,
-event_ime TEXT NOT NULL,
-FOREIGN KEY (event_datum, event_ime) REFERENCES event(datum, ime) ON DELETE CASCADE ON UPDATE CASCADE,
--- Ëe se izbriöe event, se izbiöe tudi vse skupine ki so igrale na tem eventu.
-PRIMARY KEY (skupina, event_datum, event_ime)
+	skupina TEXT NOT NULL REFERENCES skupina(ime) ON DELETE CASCADE ON UPDATE CASCADE,
+	event_datum DATE NOT NULL,
+	event_ime TEXT NOT NULL,
+	FOREIGN KEY (event_datum, event_ime) REFERENCES event(datum, ime) ON DELETE CASCADE ON UPDATE CASCADE, 
+	-- ƒçe se izbri≈°e event, se izbi≈°e tudi vse skupine ki so igrale na tem eventu.
+	PRIMARY KEY (skupina, event_datum, event_ime)
 );
 
 -- FIKSIRANE TABELE
 
--- Na voljo bodo tri moûnosti: M, Z, vseeno.
+-- Na voljo bodo tri mo≈ænosti: M, Z, vseeno.
 CREATE TABLE spol (
-spol TEXT PRIMARY KEY
+	spol TEXT PRIMARY KEY
 );
 
 -- Na voljo bodo tri stopnje: beginner, intermediate, advanced.
 CREATE TABLE stopnja_znanja (
-stopnja TEXT PRIMARY KEY
+	stopnja TEXT PRIMARY KEY
 );
 
 -- Uporabniki bodo lahko izbirali med obstojecimi tipi glasbil.
 CREATE TABLE tip_glasbila_ali_vokal (
-ime TEXT PRIMARY KEY
+	ime TEXT PRIMARY KEY
 );
 
 -- Uporabniki bodo lahko izbirali med obstojecimi zanri.
 CREATE TABLE zanr (
-ime TEXT PRIMARY KEY
+	ime TEXT PRIMARY KEY
 );
 
--- Seznam vseh slovenskih obËin.
+-- Seznam vseh slovenskih obƒçin. 
 CREATE TABLE obcina (
-ime TEXT PRIMARY KEY
+	ime TEXT PRIMARY KEY
 );
