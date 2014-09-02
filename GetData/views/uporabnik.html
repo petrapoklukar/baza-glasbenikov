@@ -258,7 +258,7 @@
                   <div class="form-group">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-9">
-                      <input type="password" name="geslo_novo1" class="form-control" placeholder="Novo geslo">
+                      <input type="password" name="geslo_novo1" class="form-control" placeholder="Novo geslo" >
                     </div>
                     <div class="col-sm-1"></div>
                   </div>
@@ -332,9 +332,9 @@
               <td>{{element[0]}}</td>
               <td>{{element[1]}}</td>
               <td>{{element[2]}}</td>
-              %if uporime1==uporime2:
+              %if uporime1==uporime2 and len(TabelaInstrumentov) > 1:
                 <td>
-                  <form action="/{{uporime1}}" method="post">
+                  <form action="/uporabnik/{{uporime1}}" method="post">
                      <p><input type="hidden" name="delete" value="{{"1"+element[0]}}">
                      <input type="submit" value="Izbriši" name="submit"></p>
                   </form>
@@ -419,7 +419,7 @@
               <td>{{element[0]}}</td>
               <td>&nbsp;</td>
               <td>&nbsp;</td>
-              %if uporime1==uporime2:
+              %if uporime1==uporime2 and len(ObcinaDelovanja) > 1:
                 <td>
                   <form action="/uporabnik/{{uporime1}}" method="post">
                      <p><input type="hidden" name="delete" value="{{"2"+element[0]}}">
@@ -622,6 +622,22 @@
 
         <div class="col-md-1"></div>
     </div>
+    <br>
+
+    %if uporime1==uporime2:
+      <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+          
+          <form action="/brisi/{{uporime1}}" method="post">
+            <button type="submit" name="delete" value="Izbriši svoj profil" class="btn btn-danger">Izbriši svoj profil</button>
+          </form>
+        </div>
+
+        <div class="col-md-1"></div>
+      </div>
+      <br>
+    %end
 
     <div class="row">
       <div class="col-md-1"></div>

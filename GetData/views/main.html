@@ -65,6 +65,16 @@
 		</div>
 	</div>
 
+	%for sporocilo in sporocila:
+    <div class="row">
+      <div class="col-md-1"></div>
+        <div class="col-md-10">
+          <div class="alert {{sporocilo[0]}}">{{sporocilo[1]}}</div>
+        </div>
+      <div class="col-md-1"></div>
+    </div>
+  %end
+
 	<div class="row">
 		<div class="col-md-1"></div>
 			<div class="col-md-5">

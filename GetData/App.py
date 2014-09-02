@@ -82,7 +82,7 @@ def get_user(auto_login = True):
 
 @bottle.route('/')
 @bottle.get('/')
-def main():
+def main(sporocila=[]):
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     uporabnik = cur.fetchall()
     
@@ -112,7 +112,7 @@ def main():
     
     return bottle.template('main.html', uporabnik=uporabnik, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
-                   obcina2=CurObcina2, isce = CurIsce, isce2 = CurIsce2)
+                   obcina2=CurObcina2, isce = CurIsce, isce2 = CurIsce2, sporocila = sporocila)
 
 
 @bottle.post('/iskanjeglasbenika')
@@ -373,25 +373,25 @@ def uporabnik_change(uporime_stran):
             glasbilo=element_izbris[1:]
 
             cur.execute('DELETE FROM igra_poje WHERE glasbenik = %s AND glasbilo = %s', (uporime_login, glasbilo))
-            sporocila.append(("alert-success", "Izbrisali ste glasbilo."))
+            sporocila.append(("alert-warning", "Izbrisali ste glasbilo."))
             
         elif element_izbris[0]=='2':
             obcina=element_izbris[1:]
 
             cur.execute('DELETE FROM glasbenik_deluje_v_okolici WHERE glasbenik = %s AND obcina = %s', (uporime_login, obcina))
-            sporocila.append(("alert-success", "Izbrisali ste obcino."))
+            sporocila.append(("alert-warning", "Izbrisali ste obcino."))
             
         elif element_izbris[0]=='3':
             IgraZanr=element_izbris[1:]
             
             cur.execute('DELETE FROM glasbenik_igra_zanr WHERE glasbenik = %s AND igra_zanr = %s', (uporime_login, IgraZanr))
-            sporocila.append(("alert-success", "Izbrisali ste igran zanr."))
+            sporocila.append(("alert-warning", "Izbrisali ste igran zanr."))
             
         elif element_izbris[0]=='4':
             IsceZanr=element_izbris[1:]
 
             cur.execute('DELETE FROM glasbenik_isce_skupino WHERE glasbenik = %s AND zanr = %s', (uporime_login, IsceZanr))            
-            sporocila.append(("alert-success", "Izbrisali ste iskan zanr."))
+            sporocila.append(("alert-warning", "Izbrisali ste iskan zanr."))
         
         return uporabnikova_stran(uporime_stran, sporocila=sporocila)
 
@@ -437,14 +437,14 @@ def uporabnik_change(uporime_stran):
                 cur.execute("UPDATE glasbenik SET e_mail=%s WHERE uporabnisko_ime=%s", (email_new, uporime_login))
                 
                 sporocila.append(("alert-success", "Spremenili ste si email."))
-            if lrojstva_new != '':
+            if lrojstva_new != '' and lrojstva_new != None:
                 cur.execute("UPDATE glasbenik SET leto_rojstva=%s WHERE uporabnisko_ime=%s", (lrojstva_new, uporime_login))
 
                 sporocila.append(("alert-success", "Spremenili ste leto rojstva."))
 
             if uporime_new!= '':
                 cur.execute("UPDATE glasbenik SET uporabnisko_ime=%s WHERE uporabnisko_ime=%s" , (uporime_new, uporime_login))
-                
+                uporime_stran = uporime_new
                 sporocila.append(("alert-success", "Spremenili ste uporabniško ime."))
                 ## TUKAJ TE PREUSMERI NA GLAVNI PAGE
 
@@ -641,7 +641,7 @@ def skupinasignin():
 
 @bottle.route('/skupina/<:skupina_stran/')
 @bottle.route('/skupina/<skupina_stran>') 
-def skupinska_stran(skupina_stran,sporocila=[]): # v argumentu funkcije je informacija na čigavi spletni strani smo
+def skupinska_stran(skupina_stran,sporocila=[], parametri=[]): # v argumentu funkcije je informacija na čigavi spletni strani smo
     # preverimo ali skupina obstaja
     cur.execute("SELECT 1 FROM skupina WHERE ime=%s", (skupina_stran,))
     if cur.fetchone() is None:
@@ -689,12 +689,23 @@ def skupinska_stran(skupina_stran,sporocila=[]): # v argumentu funkcije je infor
     CurSkupina=cur.fetchall()
 
     MoznaLeta = [i for i in range(TrenutnoLeto-90, TrenutnoLeto+1)]
+    clan_nov = None
+    IzbranClan = False
+    Instrumenti = []
+
+    if parametri != []:
+        clan_nov = parametri[0]
+        IzbranClan = parametri[1]
+        Instrumenti = parametri[2]
     
     return bottle.template('skupina.html',
                            skupina_stran=skupina_stran,
                            uporime = uporime_login,
                            Clani=CurClani,
                            JeClan=JeClan,
+                           clan_nov = clan_nov,
+                           IzbranClan = IzbranClan,
+                           Instrumenti = Instrumenti,
                            MoznaLeta = MoznaLeta,
                            Iskani_clani=CurIskaniClani,
                            ObcinaDelovanja=CurObcinaDelovanja,
@@ -707,7 +718,7 @@ def skupinska_stran(skupina_stran,sporocila=[]): # v argumentu funkcije je infor
                            zanr=CurZanrDropdown,
                            spol=CurSpolDropdown)
 
-
+    
 
 @bottle.post("/skupina/<skupina_stran>")
 def skupina_change(skupina_stran):
@@ -716,7 +727,8 @@ def skupina_change(skupina_stran):
     # Kdo je prijavljen?
     (uporime_login, ime_login, priimek_login, geslo) = get_user()
     # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
-    sporocila = [] 
+    sporocila = []
+    parametri = []
 
     # Brisanje podatkov
 
@@ -732,22 +744,22 @@ def skupina_change(skupina_stran):
             clan=element_izbris[1:]
             split = element_izbris.split(',')
             cur.execute('DELETE FROM clani_skupine WHERE skupina = %s AND clan = %s AND glasbilo = %s', (skupina_stran, split[1], split[2]))
-            sporocila.append(("alert-success", "Vrgli ste člana iz skupine."))
+            sporocila.append(("alert-warning", "Vrgli ste člana iz skupine."))
             
         elif element_izbris[0]=='2':
             split=element_izbris.split(',')
             cur.execute('DELETE FROM skupina_isce WHERE skupina = %s AND glasbilo = %s AND spol = %s', (skupina_stran, split[1], split[2]))
-            sporocila.append(("alert-success", "Izbrisali ste oglas za iskanega člana."))
+            sporocila.append(("alert-warning", "Izbrisali ste oglas za iskanega člana."))
             
         elif element_izbris[0]=='3':
             obcina=element_izbris[1:]
             cur.execute('DELETE FROM skupina_deluje_v_okolici WHERE skupina = %s AND obcina = %s', (skupina_stran, obcina))
-            sporocila.append(("alert-success", "Izbrisali ste občino delovanja."))
+            sporocila.append(("alert-warning", "Izbrisali ste občino delovanja."))
             
         elif element_izbris[0]=='4':
             IgranZanr=element_izbris[1:]
             cur.execute('DELETE FROM skupina_igra_zanr WHERE skupina = %s AND igra_zanr = %s', (skupina_stran, IgranZanr))
-            sporocila.append(("alert-success", "Izbrisali ste igran zanr."))
+            sporocila.append(("alert-warning", "Izbrisali ste igran zanr."))
         
         
         return skupinska_stran(skupina_stran, sporocila=sporocila)
@@ -800,19 +812,22 @@ def skupina_change(skupina_stran):
         #VSTAVLJANJE PODATKOV O DEJAVNOSTI
     
         # TABELA CLANOV
-        clan_nov = bottle.request.forms.getunicode('clan_nov')
-        instrument_nov = bottle.request.forms.getunicode('instrument_nov')
-    
-        if clan_nov != None and instrument_nov != None:
-            # Pogledamo kaj igra uporabnik, ki je ustvaril skupino in vse to dodamo v tabele;
-            cur.execute("SELECT glasbilo FROM igra_poje WHERE glasbenik=%s", (clan_nov,))
-            Instrumenti = cur.fetchall()
-    
-            for glasbilo in Instrumenti:
-            # Tisti ki ustvari skupino je avtomatično njen član
+        clan_nov = bottle.request.forms.getunicode('clan_nov')   
+        if clan_nov != None:
+            IskanClan = True
+            igraninstrument = bottle.request.forms.get('igraninstrument')
+            if igraninstrument != None:
                 cur.execute("""INSERT INTO clani_skupine(skupina, clan, glasbilo)
-                                    VALUES (%s, %s, %s)""", (skupina_stran, clan_nov, glasbilo[0]))
-            sporocila.append(("alert-success", "Dodali ste člana."))
+                                    VALUES (%s, %s, %s)""", (skupina_stran, clan_nov, igraninstrument))
+                sporocila.append(("alert-success", "Dodali ste člana."))
+
+            else:
+                # Pogledamo kaj igra uporabnik, ki je ustvaril skupino in vse to dodamo v tabele;
+                cur.execute("SELECT glasbilo FROM igra_poje WHERE glasbenik=%s", (clan_nov,))
+                Instrumenti = cur.fetchall()
+                sporocila.append(("alert-info", "Izberite glasbilo, ki ga igra clan."))
+                parametri = [clan_nov, IskanClan, Instrumenti]
+                
             
 
         # TABELA ISKANIH PROFILOV
@@ -844,7 +859,7 @@ def skupina_change(skupina_stran):
     # Prikažemo stran z uporabnikom, z danimi sporočili. Kot vidimo,
     # lahko kar pokličemo funkcijo, ki servira tako stran
     
-    return skupinska_stran(skupina_stran, sporocila=sporocila)
+    return skupinska_stran(skupina_stran, sporocila=sporocila, parametri = parametri)
 
     
 @bottle.post("/brisi/<skupina_stran>")
@@ -856,9 +871,20 @@ def skupina_change(skupina_stran):
     
     if 'delete' in bottle.request.POST.keys():
         cur.execute('DELETE FROM skupina WHERE ime = %s', (skupina_stran,))
-        sporocila.append(("alert-success", "Izbrisali ste skupino {0}.".format(skupina_stran)))
+        sporocila.append(("alert-danger", "Izbrisali ste skupino {0}.".format(skupina_stran)))
     return uporabnikova_stran(uporime_login,sporocila=sporocila)
 
+@bottle.post("/brisi/<uporime_stran>")
+def skupina_change(uporime_stran):
+    # Brisanje podatkov
+    (uporime_login, ime_login, priimek_login, geslo) = get_user()
+    # Pokazali bomo eno ali več sporočil, ki jih naberemo v seznam
+    sporocila = []
+    
+    if 'delete' in bottle.request.POST.keys():
+        cur.execute('DELETE FROM glasbenik WHERE uporabnisko_ime = %s', (uporime_stran,))
+        sporocila.append(("alert-danger", "Izbrisali ste se iz baze."))
+    return main(sporocila)
 
 
 bottle.run(host='localhost', port=8080, debug=True)
