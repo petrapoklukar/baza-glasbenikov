@@ -79,10 +79,33 @@ def get_user(auto_login = True):
     else:
         return None
 
+def sem_prijavljen(auto_login = True):
+    """Poglej cookie in ugotovi, kdo je prijavljeni uporabnik,
+       vrni njegov username in ime. Če ni prijavljen, presumeri
+       na stran za prijavo ali vrni None (advisno od auto_login).
+    """
+    # Dobimo username iz piškotka
+    username = bottle.request.get_cookie('username', secret=secret)
+    # Preverimo, ali ta uporabnik obstaja
+    if username is not None:
+        cur.execute("SELECT uporabnisko_ime FROM glasbenik WHERE uporabnisko_ime=%s",
+                  (username,))
+        r = cur.fetchone()
+        if r is not None:
+            # uporabnik obstaja, vrnemo njegove podatke
+            return r
+        
+    # Če pridemo do sem, uporabnik ni prijavljen
+    else:
+        return None
+
 
 @bottle.route('/')
 @bottle.get('/')
 def main(sporocila=[]):
+    cur.execute("SELECT * FROM prijavljen_je;")
+    prijavljen_uporime = cur.fetchone()[0]
+    
     cur.execute("SELECT ime FROM tip_glasbila_ali_vokal ORDER BY ime")
     uporabnik = cur.fetchall()
     
@@ -112,11 +135,14 @@ def main(sporocila=[]):
     
     return bottle.template('main.html', uporabnik=uporabnik, obcina=CurObcina, zanr=CurZanr,
                    stopnja=CurStopnja, spol=CurSpol, zanr2=CurZanr2,
-                   obcina2=CurObcina2, isce = CurIsce, isce2 = CurIsce2, sporocila = sporocila)
+                   obcina2=CurObcina2, isce = CurIsce, isce2 = CurIsce2, sporocila = sporocila, prijavljen_uporime = prijavljen_uporime)
 
 
 @bottle.post('/iskanjeglasbenika')
-def iskanje(): 
+def iskanje():
+    cur.execute("SELECT * FROM prijavljen_je;")
+    prijavljen_uporime = cur.fetchone()[0]
+    
     instrument = bottle.request.forms.getunicode('instrument')
     obcina = bottle.request.forms.getunicode('obcina')
     zanr = bottle.request.forms.getunicode('zanr')
@@ -158,17 +184,19 @@ def iskanje():
     cur.execute(select_stavek, (parametri))
     CurIskanjeGlasbenika = cur.fetchall()
     
-    return bottle.template('iskanjeglasbenika.html', IskanjeGlasbenika = CurIskanjeGlasbenika)
+    return bottle.template('iskanjeglasbenika.html', IskanjeGlasbenika = CurIskanjeGlasbenika, prijavljen_uporime = prijavljen_uporime)
 
 
 @bottle.post('/iskanjeskupine')
 def iskanje():
+    cur.execute("SELECT * FROM prijavljen_je;")
+    prijavljen_uporime = cur.fetchone()[0]
+    
     obcina2 = bottle.request.forms.getunicode('obcina2')
     zanr2 = bottle.request.forms.getunicode('zanr2')
     isce2 = bottle.request.forms.getunicode('isce2')
 
     zadetki = (obcina2, zanr2, isce2)
-    print(zadetki)
 
     select_stavek = """SELECT DISTINCT ime, datum_ustanovitve, spletna_stran, fb, obcina, igra_zanr, glasbilo, spol, stevilo FROM skupina
         LEFT JOIN skupina_deluje_v_okolici ON skupina.ime = skupina_deluje_v_okolici.skupina
@@ -193,7 +221,7 @@ def iskanje():
     cur.execute(select_stavek, (parametri))
     CurIskanjeSkupine = cur.fetchall()
     
-    return bottle.template('iskanjeskupine.html', IskanjeSkupine = CurIskanjeSkupine)
+    return bottle.template('iskanjeskupine.html', IskanjeSkupine = CurIskanjeSkupine, prijavljen_uporime = prijavljen_uporime)
 
 
 @bottle.get('/login')
@@ -205,9 +233,12 @@ def login_get():
 
 @bottle.get("/logout/") # naslov na katerem ti pobriše kuki in te vrže na glavno stran
 def logout():
-    """Pobriši cookie in preusmeri na login."""
-    bottle.response.delete_cookie('username')
-    bottle.redirect('/')
+    """Pobriši cookie in preusmeri na glavno stran."""
+    prijavljen_uporime = None
+    cur.execute("UPDATE prijavljen_je SET uporabnik = %s", (prijavljen_uporime,))
+    bottle.response.delete_cookie(key='username', secret=secret, path='/')
+    
+    bottle.redirect('/login')
 
 
 @bottle.post("/login")
@@ -220,6 +251,7 @@ def login_post():
     # Izračunamo MD5 has gesla, ki ga bomo spravili
     password = password_md5(bottle.request.forms.getunicode('geslo'))
     # Preverimo, ali se je uporabnik pravilno prijavil
+    cur.execute("UPDATE prijavljen_je SET uporabnik = %s", (username,))
     
     cur.execute("SELECT 1 FROM glasbenik WHERE uporabnisko_ime=%s AND geslo=%s",
               (username, password))
@@ -232,7 +264,8 @@ def login_post():
                                uporime=username)
     else:
         # Vse je v redu, nastavimo cookie in preusmerimo na glavno stran
-        bottle.response.set_cookie('username', username, path='/', secret=secret)
+        bottle.response.set_cookie('username', username, secret=secret, path='/')
+        prijavljen_uporime = username
         bottle.redirect("/uporabnik/"+username) 
 
 
