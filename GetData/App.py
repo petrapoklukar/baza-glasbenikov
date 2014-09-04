@@ -695,7 +695,7 @@ def skupinska_stran(skupina_stran,sporocila=[], parametri=[]): # v argumentu fun
     cur.execute("SELECT spol FROM spol") # dropdown meni za spol
     CurSpolDropdown=cur.fetchall()
 
-    cur.execute("SELECT uporabnisko_ime FROM glasbenik") # dropdown meni za uporabnike baze
+    cur.execute("SELECT uporabnisko_ime FROM glasbenik ORDER BY uporabnisko_ime") # dropdown meni za uporabnike baze
     CurUporabnikiDropdown=cur.fetchall() 
     
     cur.execute("""SELECT DISTINCT skupina, clan, glasbilo, spol FROM clani_skupine
